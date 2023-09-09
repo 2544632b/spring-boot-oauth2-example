@@ -1,0 +1,69 @@
+server:
+  port: 8080
+  host: localhost
+  servlet:
+    session:
+      timeout: 1600s
+
+  tomcat:
+    max-connections: 1000
+    accept-count: 400
+    max-threads: 200
+    min-spare-threads: 7
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+
+  banner:
+    location: "classpath:/boot-info.text"
+
+  spring:
+    # https://learn.microsoft.com/en-us/azure/developer/java/spring-framework/spring-boot-starter-for-azure-active-directory-developer-guide?tabs=SpringCloudAzure4x
+    ldap:
+      # urls: ldap://example.com:7003
+      # base: dc=platform,dc=xxxx,dc=com
+      # username: ou=acs,ou=componentaccounts,dc=platform,dc=xxxx,dc=com
+      # password: UlAwRkYl
+
+  task:
+    execution:
+      pool:
+        core-size: 2
+        max-size: 5
+        queue-capacity: 10
+        keep-alive: 60s
+        allow-core-thread-timeout: true
+      shutdown:
+        await-termination: false
+        await-termination-period:
+    thread-name-prefix: task-
+
+  mail:
+    host: test
+    port: 25
+    username: test@oauth2-provider
+    password: 123
+
+  datasource:
+    username: root
+    password:
+    url: jdbc:mysql://localhost:3306/oauth2_provider
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      maximun-pool-size: 60
+
+  redis:
+    host: '127.0.0.1'
+    port: '6379'
+    database: 0
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+    timeout: 300
+
+mybatis:
+  mapper-locations: "classpath:mapper/**/*.xml"
