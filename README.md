@@ -1,6 +1,6 @@
 ## TODO LIST
 
-Fully social connection (GitHub will unblock after a month)
+Fully social connection (GitHub will unblock next month)
 
 Administration support
 
