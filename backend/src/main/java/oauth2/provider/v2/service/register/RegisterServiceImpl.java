@@ -7,7 +7,7 @@ import oauth2.provider.v2.service.base.email.EmailSenderService;
 import oauth2.provider.v2.util.checker.EmailStringChecker;
 import oauth2.provider.v2.util.checker.UsernameStringChecker;
 import oauth2.provider.v2.util.checker.PasswordStringChecker;
-import oauth2.provider.v2.util.TOTPUtil;
+import oauth2.provider.v2.util.totp.TOTPUtil;
 import jakarta.annotation.Resource;
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

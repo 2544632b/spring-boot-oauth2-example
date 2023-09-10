@@ -9,9 +9,9 @@ import oauth2.provider.v2.model.form.response.oauth.OAuthAuthorizeTokenResp;
 import oauth2.provider.v2.model.user.info.oauth.server.OAuthSessionInfo;
 import oauth2.provider.v2.service.base.oauth.OAuthEntityService;
 import oauth2.provider.v2.service.base.user.UserEntityService;
-import oauth2.provider.v2.util.RandomPassword;
+import oauth2.provider.v2.util.random.RandomPassword;
 import jakarta.annotation.Resource;
-import oauth2.provider.v2.util.ClientJSONWebToken;
+import oauth2.provider.v2.util.jwt.ClientJSONWebToken;
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.stereotype.Service;
 

@@ -4,8 +4,8 @@ import oauth2.provider.v2.deque.user.forgot.ForgotVerifyCodeDeque;
 import oauth2.provider.v2.model.user.info.entity.UserEntity;
 import oauth2.provider.v2.service.base.email.EmailSenderService;
 import oauth2.provider.v2.service.profile.user.change.ChangeUserDetailsService;
-import oauth2.provider.v2.util.RandomPassword;
-import oauth2.provider.v2.util.RandomVerifyCode;
+import oauth2.provider.v2.util.random.RandomPassword;
+import oauth2.provider.v2.util.random.RandomVerifyCode;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 

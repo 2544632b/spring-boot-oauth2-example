@@ -3,7 +3,7 @@ package oauth2.provider.v2.service.verify;
 import oauth2.provider.v2.deque.user.register.RegisterVerifyCodeDeque;
 import oauth2.provider.v2.model.user.info.entity.UserEntity;
 import oauth2.provider.v2.service.base.user.UserEntityService;
-import oauth2.provider.v2.util.RandomVerifyCode;
+import oauth2.provider.v2.util.random.RandomVerifyCode;
 import oauth2.provider.v2.util.checker.EmailStringChecker;
 import oauth2.provider.v2.service.base.email.EmailSenderService;
 import jakarta.annotation.Resource;
