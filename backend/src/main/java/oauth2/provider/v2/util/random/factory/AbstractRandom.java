@@ -1,4 +1,4 @@
-package oauth2.provider.v2.util.factory;
+package oauth2.provider.v2.util.random.factory;
 
 import java.security.SecureRandom;
 

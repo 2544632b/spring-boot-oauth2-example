@@ -7,8 +7,9 @@ import oauth2.provider.v2.model.form.request.user.login.LoginFormPreview;
 import oauth2.provider.v2.model.form.response.login.LoginResp;
 import oauth2.provider.v2.model.user.info.entity.UserEntity;
 import oauth2.provider.v2.service.authentication.LoginAfterService;
-import oauth2.provider.v2.util.JSONWebToken;
-import oauth2.provider.v2.util.AESUtil;
+import oauth2.provider.v2.util.date.DateUtil;
+import oauth2.provider.v2.util.jwt.JSONWebToken;
+import oauth2.provider.v2.util.aes.AESUtil;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -44,6 +45,9 @@ public class Login {
     @Resource
     private AESUtil AESUtil;
 
+    @Resource
+    private DateUtil DateUtil;
+
     private static final Logger logger = LoggerFactory.getLogger(Login.class);
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -55,8 +59,7 @@ public class Login {
 
                 UserAuthenticateService.updateLastLoginIp(LoginForm.keywords(), request.getRemoteAddr());
                 Date date = new Date(System.currentTimeMillis());
-                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                String date2 = dateFormat.format(date);
+                String date2 = DateUtil.format(date);
 
                 var loginResp = LoginResp.make(user.getEmail(), user.getUsername(), user.getUserTotp(), request.getRemoteAddr(), date2);
 

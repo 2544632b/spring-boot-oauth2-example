@@ -1,4 +1,4 @@
-package oauth2.provider.v2.util;
+package oauth2.provider.v2.util.aes;
 
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.stereotype.Component;

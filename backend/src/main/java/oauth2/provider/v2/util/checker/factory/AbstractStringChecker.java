@@ -1,4 +1,4 @@
-package oauth2.provider.v2.util.factory;
+package oauth2.provider.v2.util.checker.factory;
 
 public abstract class AbstractStringChecker {
     protected String specialChars;

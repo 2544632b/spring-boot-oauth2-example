@@ -1,4 +1,4 @@
-package oauth2.provider.v2.util;
+package oauth2.provider.v2.util.totp;
 
 import oauth2.provider.v2.util.base.Base32;
 import org.springframework.stereotype.Component;

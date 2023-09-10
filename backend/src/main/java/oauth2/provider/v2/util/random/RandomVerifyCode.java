@@ -1,6 +1,6 @@
-package oauth2.provider.v2.util;
+package oauth2.provider.v2.util.random;
 
-import oauth2.provider.v2.util.factory.AbstractRandom;
+import oauth2.provider.v2.util.random.factory.AbstractRandom;
 import org.springframework.stereotype.Component;
 
 @Component

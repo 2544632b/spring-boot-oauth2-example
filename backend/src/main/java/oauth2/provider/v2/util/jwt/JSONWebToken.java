@@ -1,9 +1,9 @@
-package oauth2.provider.v2.util;
+package oauth2.provider.v2.util.jwt;
 
 import java.io.Serial;
 import java.io.Serializable;
 
-import oauth2.provider.v2.util.factory.AbstractJSONWebToken;
+import oauth2.provider.v2.util.jwt.factory.AbstractJSONWebToken;
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.SignatureAlgorithm;
 

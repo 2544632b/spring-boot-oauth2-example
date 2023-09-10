@@ -1,4 +1,4 @@
-package oauth2.provider.v2.util.factory;
+package oauth2.provider.v2.util.jwt.factory;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

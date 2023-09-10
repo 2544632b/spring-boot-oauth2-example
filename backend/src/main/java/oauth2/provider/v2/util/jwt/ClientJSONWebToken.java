@@ -1,7 +1,7 @@
-package oauth2.provider.v2.util;
+package oauth2.provider.v2.util.jwt;
 
 import io.jsonwebtoken.SignatureAlgorithm;
-import oauth2.provider.v2.util.factory.AbstractJSONWebToken;
+import oauth2.provider.v2.util.jwt.factory.AbstractJSONWebToken;
 
 import java.io.Serial;
 
