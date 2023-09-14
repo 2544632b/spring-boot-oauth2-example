@@ -13,7 +13,7 @@ public class VerifyCodeInfo {
         this.expire = System.currentTimeMillis();
     }
 
-    public UserEntity getLoginUserEntity() {
+    public UserEntity getUserEntity() {
         return userInfo;
     }
     public long getExpire() {

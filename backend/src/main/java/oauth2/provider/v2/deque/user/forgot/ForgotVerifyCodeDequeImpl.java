@@ -23,7 +23,7 @@ public class ForgotVerifyCodeDequeImpl extends AbstractCodeDeque<VerifyCodeInfo>
     public boolean insert(UserEntity userInfo, int code) {
         checkExpired(VerifyCodeInfo -> System.currentTimeMillis() - VerifyCodeInfo.getExpire() >= 50000);
         for (VerifyCodeInfo verifyCodeInfo : /*VerifyCodeInfoS*/ deque) {
-            if (userInfo.getEmail().equals(verifyCodeInfo.getLoginUserEntity().getEmail())) {
+            if (userInfo.getEmail().equals(verifyCodeInfo.getUserEntity().getEmail())) {
                 return false;
             }
         }
@@ -46,12 +46,12 @@ public class ForgotVerifyCodeDequeImpl extends AbstractCodeDeque<VerifyCodeInfo>
     public UserEntity find(String email, int code) {
         checkExpired(VerifyCodeInfo -> System.currentTimeMillis() - VerifyCodeInfo.getExpire() >= 50000);
         for (VerifyCodeInfo verifyCodeInfo : /*VerifyCodeInfoS*/ deque) {
-            if (verifyCodeInfo.getLoginUserEntity().getEmail().equals(email) &&
+            if (verifyCodeInfo.getUserEntity().getEmail().equals(email) &&
                     code == verifyCodeInfo.getCode()
             ) {
                 try {
                     if(lock.tryLock(5, TimeUnit.SECONDS)) {
-                        UserEntity temp = verifyCodeInfo.getLoginUserEntity();
+                        UserEntity temp = verifyCodeInfo.getUserEntity();
                         /*VerifyCodeInfoS*/ deque.remove(verifyCodeInfo);
                         return temp;
                     }

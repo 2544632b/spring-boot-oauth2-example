@@ -35,7 +35,7 @@ public class RegisterVerifyCodeDequeImpl extends AbstractCodeDeque<VerifyCodeInf
         }
         checkExpired(VerifyCodeInfo -> System.currentTimeMillis() - VerifyCodeInfo.getExpire() >= 50000);
         for (VerifyCodeInfo verifyCodeInfo : deque) {
-            if (verifyCodeInfo.getLoginUserEntity().getEmail().equals(userInfo.getEmail())) {
+            if (verifyCodeInfo.getUserEntity().getEmail().equals(userInfo.getEmail())) {
                 return false;
             }
         }
@@ -58,12 +58,12 @@ public class RegisterVerifyCodeDequeImpl extends AbstractCodeDeque<VerifyCodeInf
     public UserEntity find(String email, int code) {
         checkExpired(VerifyCodeInfo -> System.currentTimeMillis() - VerifyCodeInfo.getExpire() >= 50000);
         for (VerifyCodeInfo verifyCodeInfo : deque) {
-            if (verifyCodeInfo.getLoginUserEntity().getEmail().equals(email) &&
+            if (verifyCodeInfo.getUserEntity().getEmail().equals(email) &&
                     code == verifyCodeInfo.getCode()
             ) {
                 try {
                     if(lock.tryLock(5, TimeUnit.SECONDS)) {
-                        UserEntity temp = verifyCodeInfo.getLoginUserEntity();
+                        UserEntity temp = verifyCodeInfo.getUserEntity();
                         deque.remove(verifyCodeInfo);
                         return temp;
                     }
