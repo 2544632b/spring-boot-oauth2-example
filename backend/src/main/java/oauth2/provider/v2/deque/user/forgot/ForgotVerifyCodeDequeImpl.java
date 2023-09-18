@@ -3,6 +3,7 @@ package oauth2.provider.v2.deque.user.forgot;
 import oauth2.provider.v2.deque.factory.AbstractCodeDeque;
 import oauth2.provider.v2.model.user.info.entity.UserEntity;
 import oauth2.provider.v2.model.user.info.deque.VerifyCodeInfo;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
 
 import java.util.concurrent.TimeUnit;
@@ -64,5 +65,10 @@ public class ForgotVerifyCodeDequeImpl extends AbstractCodeDeque<VerifyCodeInfo>
             }
         }
         return null;
+    }
+
+    @Scheduled(cron = "0/50 * *  * * ? ")
+    public void delete() {
+        checkExpired(VerifyCodeInfo -> System.currentTimeMillis() - VerifyCodeInfo.getExpire() >= 50000);
     }
 }

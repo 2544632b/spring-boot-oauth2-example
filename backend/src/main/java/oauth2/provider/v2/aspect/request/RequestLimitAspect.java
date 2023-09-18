@@ -7,9 +7,9 @@ import oauth2.provider.v2.model.user.info.deque.RequestInfo;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -59,4 +59,8 @@ public class RequestLimitAspect extends AbstractCodeDeque<RequestInfo> {
         throw new RuntimeException("Request heavy");
     }
 
+    @Scheduled(cron = "0/50 * *  * * ? ")
+    public void delete() {
+        checkExpired(RequestInfo -> System.currentTimeMillis() - RequestInfo.getExpire() >= (180 * 1000));
+    }
 }

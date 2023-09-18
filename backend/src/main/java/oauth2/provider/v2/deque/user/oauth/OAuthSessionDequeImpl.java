@@ -3,6 +3,7 @@ package oauth2.provider.v2.deque.user.oauth;
 import oauth2.provider.v2.deque.factory.AbstractCodeDeque;
 import oauth2.provider.v2.model.user.info.oauth.server.OAuthSessionInfo;
 import oauth2.provider.v2.util.base.Operator;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -76,5 +77,10 @@ public class OAuthSessionDequeImpl extends AbstractCodeDeque<OAuthSessionInfo> i
     public void delete(String username) {
         checkExpired(OAuthSessionInfo -> System.currentTimeMillis() - OAuthSessionInfo.getExpire() >= (120 * 1000));
         deque.removeIf(OAuthSessionInfo -> OAuthSessionInfo.getUsername().equals(username));
+    }
+
+    @Scheduled(cron = "0/50 * *  * * ? ")
+    public void delete() {
+        checkExpired(OAuthSessionInfo -> System.currentTimeMillis() - OAuthSessionInfo.getExpire() >= (120 * 1000));
     }
 }
