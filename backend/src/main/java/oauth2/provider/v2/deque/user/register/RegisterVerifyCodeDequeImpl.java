@@ -52,7 +52,7 @@ public class RegisterVerifyCodeDequeImpl extends AbstractCodeDeque<VerifyCodeInf
      * @param code
      * Integer code
      *
-     * @return LoginUserEntity
+     * @return UserEntity
      * Return a properties
      */
     @Override
