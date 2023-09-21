@@ -1,5 +1,6 @@
 package oauth2.provider.v2.controller.oauth;
 
+import jakarta.servlet.http.HttpServletRequest;
 import oauth2.provider.v2.annotation.controller.OAuthController;
 import oauth2.provider.v2.model.form.request.oauth.OAuthCallbackForm;
 import oauth2.provider.v2.service.oauth.client.GithubOAuthService;
@@ -14,8 +15,8 @@ public class OAuthClientAuthorizeToken {
     private GithubOAuthService GithubOAuthService;
 
     @RequestMapping(value = "/oauth/client/continue/github", method = RequestMethod.POST)
-    public Object getTokenFromProvider(@RequestBody OAuthCallbackForm OAuthCallbackForm) throws Exception {
-        return GithubOAuthService.getUserInfo(OAuthCallbackForm.getState(), OAuthCallbackForm.getCode());
+    public Object getTokenFromProvider(@RequestBody OAuthCallbackForm OAuthCallbackForm, HttpServletRequest request) throws Exception {
+        return GithubOAuthService.getUserInfo(OAuthCallbackForm.getState(), OAuthCallbackForm.getCode(), request.getRemoteAddr());
     }
 
     // ......

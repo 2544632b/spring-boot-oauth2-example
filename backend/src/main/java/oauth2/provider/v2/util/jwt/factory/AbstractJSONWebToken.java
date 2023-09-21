@@ -18,7 +18,7 @@ public abstract class AbstractJSONWebToken {
         return getClaimFromToken(token, Claims::getSubject);
     }
 
-     Date getExpirationDateFromToken(String token) {
+    public Date getExpirationDateFromToken(String token) {
         return getClaimFromToken(token, Claims::getExpiration);
     }
 

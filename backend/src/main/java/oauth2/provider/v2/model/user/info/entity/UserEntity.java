@@ -7,6 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.math.BigInteger;
 import java.util.Collection;
 
 
@@ -41,6 +42,9 @@ public class UserEntity implements UserDetails {
 
     @Column(name = "UserTotpToken")
     private String userTotp;
+
+    @Column(name = "GithubId")
+    private BigInteger githubId;
 
     @Transient
     private String lastLoginDate;
@@ -105,6 +109,10 @@ public class UserEntity implements UserDetails {
 
     public String getUserTotp() {
         return userTotp;
+    }
+
+    public BigInteger getGithubId() {
+        return githubId;
     }
 
     @Override

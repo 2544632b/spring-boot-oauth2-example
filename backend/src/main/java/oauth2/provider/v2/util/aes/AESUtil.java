@@ -13,7 +13,7 @@ import java.security.NoSuchAlgorithmException;
 @Component
 public class AESUtil {
 
-    private final byte[] raw = "1111111111111111".getBytes(StandardCharsets.UTF_8);
+    private final byte[] raw = "1123141111114590".getBytes(StandardCharsets.UTF_8);
 
     public AESUtil() throws UnsupportedEncodingException, NoSuchPaddingException, NoSuchAlgorithmException {
     }

@@ -34,9 +34,9 @@ public class RegisterVerifyCodeDequeImpl extends AbstractCodeDeque<VerifyCodeInf
         } catch(Exception e) {
             e.printStackTrace();
         }
-        checkExpired(VerifyCodeInfo -> System.currentTimeMillis() - VerifyCodeInfo.getExpire() >= 50000);
+        findExpired(VerifyCodeInfo -> System.currentTimeMillis() - VerifyCodeInfo.getExpire() >= 50000);
         for (VerifyCodeInfo verifyCodeInfo : deque) {
-            if (verifyCodeInfo.getUserEntity().getEmail().equals(userInfo.getEmail())) {
+            if (verifyCodeInfo.getLoginUserEntity().getEmail().equals(userInfo.getEmail())) {
                 return false;
             }
         }
@@ -53,24 +53,24 @@ public class RegisterVerifyCodeDequeImpl extends AbstractCodeDeque<VerifyCodeInf
      * Integer code
      *
      * @return UserEntity
-     * Return a properties
+     * Return a properties & remove it
      */
     @Override
     public UserEntity find(String email, int code) {
-        checkExpired(VerifyCodeInfo -> System.currentTimeMillis() - VerifyCodeInfo.getExpire() >= 50000);
+        findExpired(VerifyCodeInfo -> System.currentTimeMillis() - VerifyCodeInfo.getExpire() >= 50000);
         for (VerifyCodeInfo verifyCodeInfo : deque) {
-            if (verifyCodeInfo.getUserEntity().getEmail().equals(email) &&
+            if (verifyCodeInfo.getLoginUserEntity().getEmail().equals(email) &&
                     code == verifyCodeInfo.getCode()
             ) {
                 try {
                     if(lock.tryLock(5, TimeUnit.SECONDS)) {
-                        UserEntity temp = verifyCodeInfo.getUserEntity();
+                        UserEntity temp = verifyCodeInfo.getLoginUserEntity();
                         deque.remove(verifyCodeInfo);
                         return temp;
                     }
                 } catch(Exception e) {
-                    e.printStackTrace();
                     lock.unlock();
+                    e.printStackTrace();
                 } finally {
                     lock.unlock();
                 }
@@ -80,7 +80,7 @@ public class RegisterVerifyCodeDequeImpl extends AbstractCodeDeque<VerifyCodeInf
     }
 
     @Scheduled(cron = "0/50 * *  * * ? ")
-    public void delete() {
-        checkExpired(VerifyCodeInfo -> System.currentTimeMillis() - VerifyCodeInfo.getExpire() >= 50000);
+    public void execute() {
+        findExpired(VerifyCodeInfo -> System.currentTimeMillis() - VerifyCodeInfo.getExpire() >= 50000);
     }
 }

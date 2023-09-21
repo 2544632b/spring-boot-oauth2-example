@@ -7,10 +7,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigInteger;
+
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
     @Query(value = "select t from UserEntity t where t.username = :keywords or t.email = :keywords")
     UserEntity findByKeywords(@Param("keywords") String keywords);
+
+    @Query(value = "select t from UserEntity t where t.githubId = :id")
+    UserEntity findByGithubId(@Param("id") BigInteger id);
 
     @Query(value = "select t from UserEntity t where t.username = :username")
     UserEntity findByUsername(@Param("username") String username);

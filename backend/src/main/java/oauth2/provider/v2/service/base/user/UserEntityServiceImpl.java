@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.List;
 
 @Service
@@ -48,6 +49,13 @@ public class UserEntityServiceImpl implements UserEntityService {
     @Lazy
     public UserEntity findByKeywords(String keywords) {
         return dataTable.findByKeywords(keywords);
+    }
+
+    @Override
+    @Lock(LockModeType.OPTIMISTIC)
+    @Lazy
+    public UserEntity findByGithubId(BigInteger id) {
+        return dataTable.findByGithubId(id);
     }
 
     @Override

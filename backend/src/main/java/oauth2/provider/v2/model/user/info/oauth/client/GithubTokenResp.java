@@ -18,9 +18,11 @@ public class GithubTokenResp implements Serializable {
     public String getAccessToken() {
         return accessToken;
     }
+
     public String getTokenType() {
         return tokenType;
     }
+
     public String getScope() {
         return scope;
     }

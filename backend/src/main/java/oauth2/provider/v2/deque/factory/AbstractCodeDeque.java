@@ -17,11 +17,13 @@ public abstract class AbstractCodeDeque<T> {
 
     protected int hashSeed = 769;
 
+    protected int maxCapacity = 100;
+
     /**
      * @param filter
      * check the code expired or not
      */
-    protected void checkExpired(Predicate<? super T> filter) {
+    protected void findExpired(Predicate<? super T> filter) {
         try {
             if(lock.tryLock(5, TimeUnit.SECONDS)) {
                 deque.removeIf(filter);
@@ -44,13 +46,16 @@ public abstract class AbstractCodeDeque<T> {
                 if (nextIndex < deque.size()) {
                     deque.set(nextIndex, t);
                 } else {
+                    if(deque.size() >= maxCapacity) {
+                        throw new Exception("Capacity full");
+                    }
                     deque.add(t);
                 }
                 nextIndex++;
             }
         } catch(Exception e) {
-            e.printStackTrace();
             lock.unlock();
+            e.printStackTrace();
         } finally {
             lock.unlock();
         }

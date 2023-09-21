@@ -23,7 +23,7 @@ public class RequestLimitAspect extends AbstractCodeDeque<RequestInfo> {
     public RequestLimitAspect() {}
 
     public boolean insert(RequestInfo info) {
-        checkExpired(RequestInfo -> System.currentTimeMillis() - RequestInfo.getExpire() >= (180 * 1000));
+        findExpired(RequestInfo -> System.currentTimeMillis() - RequestInfo.getExpire() >= (180 * 1000));
         for(RequestInfo requestInfo : deque) {
             if(requestInfo.getAddress().equals(info.getAddress())) {
                 requestInfo.addTimes();
@@ -39,7 +39,7 @@ public class RequestLimitAspect extends AbstractCodeDeque<RequestInfo> {
 
     @Pointcut("@annotation(oauth2.provider.v2.annotation.request.RequestLimit)")
     private void requestLimit() {
-
+        super.maxCapacity = 500;
     }
 
     @Around("requestLimit()")
@@ -60,7 +60,7 @@ public class RequestLimitAspect extends AbstractCodeDeque<RequestInfo> {
     }
 
     @Scheduled(cron = "0/50 * *  * * ? ")
-    public void delete() {
-        checkExpired(RequestInfo -> System.currentTimeMillis() - RequestInfo.getExpire() >= (180 * 1000));
+    public void execute() {
+        findExpired(RequestInfo -> System.currentTimeMillis() - RequestInfo.getExpire() >= (180 * 1000));
     }
 }
