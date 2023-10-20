@@ -2,9 +2,9 @@ package oauth2.provider.v2.exception;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import oauth2.provider.v2.model.form.response.Response;
-import oauth2.provider.v2.service.authentication.LoginAfterService;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.annotation.Resource;
+import oauth2.provider.v2.util.date.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -12,8 +12,6 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,16 +19,17 @@ import java.util.UUID;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
     @Resource
-    private LoginAfterService LoginFailHandler;
+    private DateUtil DateUtil;
 
     @ExceptionHandler(value = Exception.class)
     @ResponseBody
     public Object exceptionResponse(Exception e) throws JsonProcessingException {
         Date date = new Date(System.currentTimeMillis());
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String date2 = dateFormat.format(date);
+        String date2 = DateUtil.format(date);
 
         Map<String, Object> format = new HashMap<>();
         format.put("uuid", UUID.randomUUID().toString());
@@ -45,7 +44,7 @@ public class GlobalExceptionHandler {
 
         format.clear();
 
-        // e.printStackTrace();
+        e.printStackTrace();
 
         return Response.responseError("Internal Error");
     }

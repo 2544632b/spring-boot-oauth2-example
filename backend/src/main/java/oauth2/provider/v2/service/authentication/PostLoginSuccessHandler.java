@@ -3,7 +3,7 @@ package oauth2.provider.v2.service.authentication;
 import org.springframework.stereotype.Service;
 
 @Service("LoginSuccessHandler")
-public class LoginSuccessHandler implements LoginAfterService {
+public class PostLoginSuccessHandler implements PostLoginService {
 
     @Override
     public void handle(String... texts) {

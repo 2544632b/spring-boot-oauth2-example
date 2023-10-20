@@ -85,7 +85,7 @@ public class GithubOAuthServiceImpl implements GithubOAuthService {
         Date date = new Date(System.currentTimeMillis());
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String date2 = dateFormat.format(date);
-        LoginResp loginResp = LoginResp.make(user.getEmail(), user.getUsername(), null, currentIp, date2);
+        var loginResp = LoginResp.make(user.getEmail(), user.getUsername(), null, currentIp, date2);
 
         // Transform to signature token
         Map<String, String> SessionID = new HashMap<>();

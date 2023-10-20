@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class UsernameStringChecker extends AbstractStringChecker {
     public UsernameStringChecker() {
-        super.specialChars = "./\\?<>[]{}':();$%&#\"\n\r\f\b\t\0` ";
+        super.specialChars = "./\\?<>[]{}':();@$%&#\"\n\r\f\b\t\0` ";
         super.replace = '_';
     }
 

@@ -1,7 +1,7 @@
 package oauth2.provider.v2.security;
 
 import oauth2.provider.v2.security.filter.BearerAuthenticationFilter;
-import oauth2.provider.v2.security.filter.OnceAuthenticationFilter;
+import oauth2.provider.v2.security.filter.DefaultAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -26,8 +26,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class MainSecurityConfig {
 
     @Bean
-    public OnceAuthenticationFilter onceAuthenticationFilter() {
-        return new OnceAuthenticationFilter();
+    public DefaultAuthenticationFilter onceAuthenticationFilter() {
+        return new DefaultAuthenticationFilter();
     }
 
     @Bean

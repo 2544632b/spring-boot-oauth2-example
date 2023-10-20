@@ -6,7 +6,7 @@ import oauth2.provider.v2.service.authentication.UserAuthenticateService;
 import oauth2.provider.v2.model.form.request.user.login.LoginFormPreview;
 import oauth2.provider.v2.model.form.response.login.LoginResp;
 import oauth2.provider.v2.model.user.info.entity.UserEntity;
-import oauth2.provider.v2.service.authentication.LoginAfterService;
+import oauth2.provider.v2.service.authentication.PostLoginService;
 import oauth2.provider.v2.util.date.DateUtil;
 import oauth2.provider.v2.util.jwt.JSONWebToken;
 import oauth2.provider.v2.util.aes.AESUtil;
@@ -25,7 +25,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 public class Login {
@@ -34,10 +33,10 @@ public class Login {
     private UserAuthenticateService UserAuthenticateService;
 
     @Resource
-    private LoginAfterService LoginSuccessHandler;
+    private PostLoginService LoginSuccessHandler;
 
     @Resource
-    private LoginAfterService LoginFailHandler;
+    private PostLoginService LoginFailHandler;
 
     @Resource
     private JSONWebToken JSONWebToken;
@@ -55,15 +54,15 @@ public class Login {
     public Object doLogin(@Validated @RequestBody LoginFormPreview LoginForm, HttpServletRequest request) throws Exception {
         try {
             if(UserAuthenticateService.attemptLogin(LoginForm.keywords(), LoginForm.password())) {
-                UserEntity user = UserAuthenticateService.getLoginUserEntity(LoginForm.keywords());
+                var user = UserAuthenticateService.getLoginUserEntity(LoginForm.keywords());
 
-                UserAuthenticateService.updateLastLoginIp(LoginForm.keywords(), request.getRemoteAddr());
+                this.UserAuthenticateService.updateLastLoginIp(LoginForm.keywords(), request.getRemoteAddr());
                 Date date = new Date(System.currentTimeMillis());
                 String date2 = DateUtil.format(date);
 
                 var loginResp = LoginResp.make(user.getEmail(), user.getUsername(), user.getUserTotp(), request.getRemoteAddr(), date2);
 
-                Map<String, String> SessionInfo = new HashMap<>();
+                var SessionInfo = new HashMap<>();
                 SessionInfo.put("SessionID", AESUtil.encrypt(JSONWebToken.generateToken(new ObjectMapper().writeValueAsString(loginResp))));
 
                 LoginSuccessHandler.handle(LoginForm.keywords(), LoginForm.password(), request.getRemoteAddr(), date2);

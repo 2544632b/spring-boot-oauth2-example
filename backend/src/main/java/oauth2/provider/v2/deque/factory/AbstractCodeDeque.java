@@ -11,11 +11,7 @@ public abstract class AbstractCodeDeque<T> {
 
     protected final List<T> deque = new ArrayList<>();
 
-    protected int nextIndex = 0;
-
     protected final Lock lock = new ReentrantLock();
-
-    protected int hashSeed = 769;
 
     protected int maxCapacity = 100;
 
@@ -43,15 +39,10 @@ public abstract class AbstractCodeDeque<T> {
     protected void add(T t) {
         try {
             if(lock.tryLock(5, TimeUnit.SECONDS)) {
-                if (nextIndex < deque.size()) {
-                    deque.set(nextIndex, t);
-                } else {
-                    if(deque.size() >= maxCapacity) {
-                        throw new Exception("Capacity full");
-                    }
-                    deque.add(t);
+                if(deque.size() >= maxCapacity) {
+                    throw new Exception("Capacity full");
                 }
-                nextIndex++;
+                deque.add(t);
             }
         } catch(Exception e) {
             lock.unlock();
@@ -60,5 +51,4 @@ public abstract class AbstractCodeDeque<T> {
             lock.unlock();
         }
     }
-
 }

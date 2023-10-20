@@ -23,7 +23,7 @@ public class OAuthUnAuthorizeToken {
             OAuthSessionInfoService.deleteOAuthCodeInfo(userInfo.getUsername());
         } catch(Exception e) {
             // TODO
-            // Noting to do and exception is true in here.
+            // Noting to do and exception is right in here.
         }
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @OAuthController
 public class OAuthClientAuthorizeToken {
+
     @Resource
     private GithubOAuthService GithubOAuthService;
 

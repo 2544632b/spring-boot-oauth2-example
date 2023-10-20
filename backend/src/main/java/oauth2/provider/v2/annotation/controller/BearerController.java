@@ -6,7 +6,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.lang.annotation.*;
 
-// They are no any features provided for these controllers right now.
+/**
+ * <p>Bearer controller tag</p>
+ * <p>They are no any features provided for these controllers right now.</p>
+ *
+ * @since 2.0.0
+ */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented

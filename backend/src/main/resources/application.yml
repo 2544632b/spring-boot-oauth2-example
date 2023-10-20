@@ -11,7 +11,15 @@ server:
     max-threads: 200
     min-spare-threads: 7
 
+logging:
+  file:
+    name: application.log
+
 spring:
+  output:
+    ansi:
+      enabled: DETECT
+
   main:
     allow-bean-definition-overriding: true
 
@@ -37,7 +45,7 @@ spring:
       shutdown:
         await-termination: false
         await-termination-period:
-    thread-name-prefix: task-
+    thread-name-prefix: sub-executor-
 
   mail:
     host: test

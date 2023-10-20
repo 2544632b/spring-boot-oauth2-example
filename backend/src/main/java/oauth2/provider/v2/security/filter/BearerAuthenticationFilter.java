@@ -31,7 +31,7 @@ public class BearerAuthenticationFilter extends OncePerRequestFilter {
 
     private static final Logger logger = LoggerFactory.getLogger(BearerAuthenticationFilter.class);
     /***
-     * Extends from OnceAuthenticationFilter.class
+     * Extends from DefaultAuthenticationFilter.class
      *
      * @param request
      * Request container from java servlet
@@ -60,12 +60,12 @@ public class BearerAuthenticationFilter extends OncePerRequestFilter {
         response.setHeader("Set-Cookie", "HttpOnly;Secure;SameSite=None");
 
         // URI
-        List<String> urls = List.of(
+        var urls = List.of(
                 "/default/user/info"
         );
 
         // Scope
-        Map<String, String> url2Scope = Map.of(
+        var url2Scope = Map.of(
                 "/default/user/info", "profile"
         );
 
@@ -88,14 +88,16 @@ public class BearerAuthenticationFilter extends OncePerRequestFilter {
                         return;
                     }
 
+                    // Match the scope
                     String targetScope = (url2Scope.get(request.getRequestURI()) == null) ? null : url2Scope.get(request.getRequestURI());
                     if(targetScope == null) {
                         response.setStatus(403);
                         return;
                     }
+
                     boolean match = false;
 
-                    for(String s : scope) {
+                    for(var s : scope) {
                         if (s.equals(targetScope)) {
                             match = true;
                             break;
@@ -117,32 +119,23 @@ public class BearerAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
 
+            response.setStatus(401);
+            return; //
+        }
+
+        // No bearer
+        else {
+            // Match the url
             boolean match = false;
-            for(String url : urls) {
-                if (request.getRequestURI().equals(url)) {
+            for(Map.Entry<String, String> entry : url2Scope.entrySet()) {
+                if (request.getRequestURI().equals(entry.getKey())) {
                     match = true;
                 }
             }
 
             if(!match) {    // Not resource url
-                response.setStatus(401);
+                filterChain.doFilter(request, response);
             } else {        // Is resource url
-                filterChain.doFilter(request, response);
-            }
-        }
-
-        // No bearer
-        else {
-            boolean match = false;
-            for(String url : urls) {
-                if (request.getRequestURI().equals(url)) {
-                    match = true;
-                }
-            }
-
-            if(!match) {        // Not resource url
-                filterChain.doFilter(request, response);
-            } else {            // Is resource url
                 response.setStatus(401);
             }
         }

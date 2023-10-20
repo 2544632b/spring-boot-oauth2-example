@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class EmailStringChecker extends AbstractStringChecker {
+
     public EmailStringChecker() {
         super.specialChars = "/\\?<>[]{}':();$#&%\"\n\r\f\b\t\0` ";
         super.replace = '_';

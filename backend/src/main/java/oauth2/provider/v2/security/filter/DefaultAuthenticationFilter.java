@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.List;
 
 
-public class OnceAuthenticationFilter extends OncePerRequestFilter {
+public class DefaultAuthenticationFilter extends OncePerRequestFilter {
 
     @Resource
     private AESUtil AES;
@@ -29,7 +29,7 @@ public class OnceAuthenticationFilter extends OncePerRequestFilter {
     private JSONWebToken JWT;
     @Resource
     private UserEntityService userEntity;
-    private static final Logger logger = LoggerFactory.getLogger(OnceAuthenticationFilter.class);
+    private static final Logger logger = LoggerFactory.getLogger(DefaultAuthenticationFilter.class);
 
     /***
      * @param request
@@ -96,7 +96,7 @@ public class OnceAuthenticationFilter extends OncePerRequestFilter {
                         logger.info("{} -> {} passed {}, last login: {}.",
                                 userjson.getString("email"),
                                 userjson.getString("username"),
-                                OnceAuthenticationFilter.class,
+                                DefaultAuthenticationFilter.class,
                                 userjson.getString("login")
                         );
 

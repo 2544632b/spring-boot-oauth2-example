@@ -1,11 +1,8 @@
 package oauth2.provider.v2.deque.user.register;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import oauth2.provider.v2.deque.factory.AbstractCodeDeque;
 import oauth2.provider.v2.model.user.info.entity.UserEntity;
 import oauth2.provider.v2.model.user.info.deque.VerifyCodeInfo;
-import jakarta.annotation.Resource;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
 
@@ -13,9 +10,6 @@ import java.util.concurrent.TimeUnit;
 
 @Repository
 public class RegisterVerifyCodeDequeImpl extends AbstractCodeDeque<VerifyCodeInfo> implements RegisterVerifyCodeDeque {
-
-    @Resource
-    private RedisTemplate<Object, Integer> redisTemplate;
 
     public RegisterVerifyCodeDequeImpl() {
         super();
@@ -29,11 +23,6 @@ public class RegisterVerifyCodeDequeImpl extends AbstractCodeDeque<VerifyCodeInf
      */
     @Override
     public boolean insert(UserEntity userInfo, int code) {
-        try {
-            redisTemplate.opsForValue().set(new ObjectMapper().writeValueAsString(userInfo), code);
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
         findExpired(VerifyCodeInfo -> System.currentTimeMillis() - VerifyCodeInfo.getExpire() >= 50000);
         for (VerifyCodeInfo verifyCodeInfo : deque) {
             if (verifyCodeInfo.getLoginUserEntity().getEmail().equals(userInfo.getEmail())) {
