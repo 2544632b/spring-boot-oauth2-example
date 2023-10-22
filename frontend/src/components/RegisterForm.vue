@@ -3,7 +3,7 @@
         <a-card style="opacity: 0.95;">
             <a-row type="flex" :gutter="[24,24]" justify="space-around" align="middle">
                 <a-col :span="24" :md="12" :lg="{span: 12, offset: 0}" :xl="{span: 6, offset: 2}" class="col-form">
-                    <h1 class="mb-15">Register</h1>
+                    <h1 class="mb-15">Sign up</h1>
                     <h5 class="font-regular text-muted"></h5>
                     <a-form
                         :model="formState"
@@ -47,12 +47,12 @@
                         </a-form-item>
                         <a-form-item class="mb-10" style="display: block; margin-top: 25px; margin-bottom: 30px;">
                             <a-button type="primary" html-type="submit" block class="login-form-button">
-                                Register
+                                Sign up
                             </a-button>
                         </a-form-item>
                     </a-form>
                     <p class="font-semibold text-muted"><router-link :to="BaseURL + '/login'" class="font-bold text-dark">Sign in</router-link></p>
-                    <p class="font-semiblod text-muted"><a :href="oauthURL" class="font-blod text-dark">Sign from GitHub</a></p>
+                    <p class="font-semiblod text-muted"><a :href="oauthURL" class="font-blod text-dark">Sign in from GitHub</a></p>
                     <p class="font-semiblod text-muted"><router-link :to="BaseURL + '/login/forgot'" class="font-blod text-dark">Forgot password</router-link></p>
                 </a-col>
                 <a-col :span="24" :md="12" :lg="12" :xl="12" class="col-img">
@@ -139,7 +139,7 @@
         setup() {
             const uuid = self.crypto.randomUUID();
             sessionStorage.setItem("STATE_UUID", uuid);
-            const oauthURL = "https://github.com/login/oauth/authorize?client_id=000000&redirect_uri=http://localhost/authorize/github/continue&scope=user&state=" + uuid + "&response_type=code";
+            const oauthURL = "https://github.com/login/oauth/authorize?client_id=CLIENT_ID&redirect_uri=http://localhost/authorize/github/continue&scope=user&state=" + uuid + "&response_type=code";
 
             const formState = reactive<FormState>({
                 email: '',

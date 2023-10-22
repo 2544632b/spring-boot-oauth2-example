@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.github.2544632b'
-version = '2.0.0'
+version = '2.0.1'
 sourceCompatibility = '17'
 
 
@@ -16,7 +16,7 @@ repositories {
 }
 
 dependencies {
-	// bootable drivers
+	// drivers
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-cache'

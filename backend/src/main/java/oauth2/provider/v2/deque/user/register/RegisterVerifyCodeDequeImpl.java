@@ -1,8 +1,10 @@
 package oauth2.provider.v2.deque.user.register;
 
+import jakarta.annotation.Resource;
 import oauth2.provider.v2.deque.factory.AbstractCodeDeque;
 import oauth2.provider.v2.model.user.info.entity.UserEntity;
 import oauth2.provider.v2.model.user.info.deque.VerifyCodeInfo;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
 
@@ -10,6 +12,11 @@ import java.util.concurrent.TimeUnit;
 
 @Repository
 public class RegisterVerifyCodeDequeImpl extends AbstractCodeDeque<VerifyCodeInfo> implements RegisterVerifyCodeDeque {
+
+    @Resource
+    private RedisTemplate<Object, Object> redisTemplate;
+
+    private boolean isRedis = true;
 
     public RegisterVerifyCodeDequeImpl() {
         super();
@@ -23,6 +30,24 @@ public class RegisterVerifyCodeDequeImpl extends AbstractCodeDeque<VerifyCodeInf
      */
     @Override
     public boolean insert(UserEntity userInfo, int code) {
+        /*
+        if(isRedis) {
+            Set<Object> keys = redisTemplate.keys("*");
+            //assert keys != null;
+            for(Object key : keys) {
+                System.out.println(key);
+                UserEntity val = (UserEntity) redisTemplate.opsForValue().get(key);
+                //assert val != null;
+                if(userInfo.getUsername().equals(val.getUsername()) || userInfo.getEmail().equals(val.getEmail())) {
+                    return false;
+                }
+            }
+
+            redisTemplate.opsForValue().set(String.valueOf(code), userInfo, 50000, TimeUnit.MICROSECONDS);
+            return true;
+        }
+        */
+
         findExpired(VerifyCodeInfo -> System.currentTimeMillis() - VerifyCodeInfo.getExpire() >= 50000);
         for (VerifyCodeInfo verifyCodeInfo : deque) {
             if (verifyCodeInfo.getLoginUserEntity().getEmail().equals(userInfo.getEmail())) {
@@ -46,6 +71,21 @@ public class RegisterVerifyCodeDequeImpl extends AbstractCodeDeque<VerifyCodeInf
      */
     @Override
     public UserEntity find(String email, int code) {
+        /*
+        if(isRedis) {
+            Set<Object> keys = redisTemplate.keys("*");
+            //assert keys != null;
+            for(Object key : keys) {
+                UserEntity val = (UserEntity) redisTemplate.opsForValue().get(key);
+                //assert val != null;
+                if(email.equals(val.getEmail()) && String.valueOf(code).equals(key)) {
+                    redisTemplate.delete(key);
+                    return val;
+                }
+            }
+        }
+        */
+
         findExpired(VerifyCodeInfo -> System.currentTimeMillis() - VerifyCodeInfo.getExpire() >= 50000);
         for (VerifyCodeInfo verifyCodeInfo : deque) {
             if (verifyCodeInfo.getLoginUserEntity().getEmail().equals(email) &&

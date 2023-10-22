@@ -19,7 +19,7 @@ public class EmailImpl implements Email {
     public boolean sendEmail(String email, String title, String content) {
         try {
             SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-            simpleMailMessage.setFrom("noreply@roidmc.com");
+            simpleMailMessage.setFrom("noreply@example.net");
             simpleMailMessage.setTo(email);
             simpleMailMessage.setSentDate(new Date());
             simpleMailMessage.setSubject(title);

@@ -29,7 +29,7 @@
                         </a-form-item>
                     </a-form>
                     <!-- / Sign In Form -->
-                    <p class="font-semibold text-muted"><router-link to="/register" class="font-bold text-dark">Register</router-link></p>
+                    <p class="font-semibold text-muted"><router-link to="/register" class="font-bold text-dark">Sign up</router-link></p>
                     <p class="font-semiblod text-muted"><a :href="githubURL" class="font-blod text-dark">Sign in from GitHub</a></p>
                     <p class="font-semiblod text-muted"><router-link to="/login/forgot" class="font-blod text-dark">Forgot password</router-link></p>
                 </a-col>
@@ -125,7 +125,7 @@
         setup() {
             const uuid = self.crypto.randomUUID();
             sessionStorage.setItem("STATE_UUID", uuid);
-            const githubURL = "https://github.com/login/oauth/authorize?client_id=000000&redirect_uri=http://localhost/authorize/github/continue&scope=user&state=" + uuid + "&response_type=code";
+            const githubURL = "https://github.com/login/oauth/authorize?client_id=CLIENT_ID&redirect_uri=http://localhost/authorize/github/continue&scope=user&state=" + uuid + "&response_type=code";
 
             const paramsObject = getQueryParams(window.location.href);
             if(paramsObject.redirect_uri) {

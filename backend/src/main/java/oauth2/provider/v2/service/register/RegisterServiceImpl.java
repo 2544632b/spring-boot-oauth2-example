@@ -15,18 +15,25 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class RegisterServiceImpl implements RegisterService {
+
     @Resource
     private UserEntityService userEntity;
+
     @Resource
     private EmailSenderService EmailSenderService;
+
     @Resource
     private VerifyCodeService RegisterVerifyCodeService;
+
     @Resource
     private EmailStringChecker EmailStringChecker;
+
     @Resource
     private UsernameStringChecker UsernameStringChecker;
+
     @Resource
     private PasswordStringChecker PasswordStringChecker;
+
     @Resource
     private TOTPUtil TOTPUtil;
 

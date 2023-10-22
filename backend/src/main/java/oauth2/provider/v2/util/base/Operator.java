@@ -43,10 +43,6 @@ public class Operator {
     }
 
     public static int[] swap(int a, int b) {
-        // a = a - b;
-        // b = b + a;
-        // a = b - a;
-        // return new int[]{a, b};
         a ^= b;
         b ^= a;
         a ^= b;

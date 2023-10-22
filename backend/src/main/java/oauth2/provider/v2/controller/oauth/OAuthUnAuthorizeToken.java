@@ -20,10 +20,10 @@ public class OAuthUnAuthorizeToken {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             UserEntity userInfo = (UserEntity) authentication.getPrincipal();  // Object -> LoginUserEntity
-            OAuthSessionInfoService.deleteOAuthCodeInfo(userInfo.getUsername());
+            OAuthSessionInfoService.deleteOAuthSessionInfoByUsername(userInfo.getUsername());
         } catch(Exception e) {
             // TODO
-            // Noting to do and exception is right in here.
+            // Noting to do.
         }
     }
 }

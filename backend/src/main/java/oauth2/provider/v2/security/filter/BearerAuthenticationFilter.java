@@ -59,11 +59,6 @@ public class BearerAuthenticationFilter extends OncePerRequestFilter {
 
         response.setHeader("Set-Cookie", "HttpOnly;Secure;SameSite=None");
 
-        // URI
-        var urls = List.of(
-                "/default/user/info"
-        );
-
         // Scope
         var url2Scope = Map.of(
                 "/default/user/info", "profile"

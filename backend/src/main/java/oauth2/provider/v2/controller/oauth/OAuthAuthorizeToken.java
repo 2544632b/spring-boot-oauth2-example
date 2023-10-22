@@ -13,12 +13,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @OAuthController
 public class OAuthAuthorizeToken {
+
     @Resource
     private OAuthSessionInfoService OAuthSessionInfoService;
+
     @Resource
     private OAuthEntityService oauthEntity;
+
     @Resource
     private BCryptPasswordEncoder bc;
+
     /***
      * OAuth2.0 / Open ID Connect 1.0 #2 (Token End point)
      * Publicly for third party web.

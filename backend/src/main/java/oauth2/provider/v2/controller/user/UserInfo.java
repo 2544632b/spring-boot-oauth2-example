@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserInfo {
 
     @RequestMapping(value = "/user/info", method = RequestMethod.GET)
-    //@PreAuthorize("authenticated")    <-- Needn't this, filter was done.
+    //@PreAuthorize("authenticated")    <-- Needn't this, filter has done.
     @ResponseBody
     public Object getUserInfo() throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

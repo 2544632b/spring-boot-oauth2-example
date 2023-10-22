@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class Register {
+
     @Resource
     private RegisterService RegisterService;
+
     private static final Logger logger = LoggerFactory.getLogger(Register.class);
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)

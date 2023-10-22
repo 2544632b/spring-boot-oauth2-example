@@ -1,4 +1,5 @@
 package oauth2.provider.v2.model.user.info.oauth.server;
+
 public class OAuthSessionInfo {
     private String clientId;
     private String scope;
@@ -15,6 +16,7 @@ public class OAuthSessionInfo {
         this.accessToken = accessToken;
         this.username = username;
     }
+
     public String getClientId() {
         return clientId;
     }

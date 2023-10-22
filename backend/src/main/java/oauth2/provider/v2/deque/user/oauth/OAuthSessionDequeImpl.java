@@ -5,6 +5,9 @@ import oauth2.provider.v2.model.user.info.oauth.server.OAuthSessionInfo;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Repository
 public class OAuthSessionDequeImpl extends AbstractCodeDeque<OAuthSessionInfo> implements OAuthSessionDeque {
 
@@ -21,12 +24,13 @@ public class OAuthSessionDequeImpl extends AbstractCodeDeque<OAuthSessionInfo> i
      **/
     @Override
     public boolean insert(OAuthSessionInfo codeInfo) {
-        findExpired(OAuthSessionInfo -> System.currentTimeMillis() - OAuthSessionInfo.getExpire() >= (120 * 1000));
+        findExpired(OAuthSessionInfo -> System.currentTimeMillis() - OAuthSessionInfo.getExpire() >= (180 * 1000));
         for(OAuthSessionInfo oAuthSessionInfo : deque) {
             if(oAuthSessionInfo.getCode().equals(codeInfo.getCode()) || oAuthSessionInfo.getAccessToken().equals(codeInfo.getAccessToken())) {
                 return false;
             }
         }
+
         // Add finally
         add(codeInfo);
         return true;
@@ -44,7 +48,7 @@ public class OAuthSessionDequeImpl extends AbstractCodeDeque<OAuthSessionInfo> i
      */
     @Override
     public OAuthSessionInfo find(String clientId, String code) {
-        findExpired(OAuthSessionInfo -> System.currentTimeMillis() - OAuthSessionInfo.getExpire() >= (120 * 1000));
+        findExpired(OAuthSessionInfo -> System.currentTimeMillis() - OAuthSessionInfo.getExpire() >= (180 * 1000));
         for(OAuthSessionInfo oAuthSessionInfo : deque) {
             if(oAuthSessionInfo.getClientId().equals(clientId) && oAuthSessionInfo.getCode().equals(code)) {
                 oAuthSessionInfo.removeCode();
@@ -64,7 +68,7 @@ public class OAuthSessionDequeImpl extends AbstractCodeDeque<OAuthSessionInfo> i
      */
     @Override
     public OAuthSessionInfo find(String bearer) {
-        findExpired(OAuthSessionInfo -> System.currentTimeMillis() - OAuthSessionInfo.getExpire() >= (120 * 1000));
+        findExpired(OAuthSessionInfo -> System.currentTimeMillis() - OAuthSessionInfo.getExpire() >= (180 * 1000));
         for(OAuthSessionInfo oAuthSessionInfo : deque) {
             if(oAuthSessionInfo.getAccessToken().equals(bearer)) {
                 return oAuthSessionInfo;
@@ -74,13 +78,19 @@ public class OAuthSessionDequeImpl extends AbstractCodeDeque<OAuthSessionInfo> i
     }
 
     @Override
-    public void delete(String username) {
-        findExpired(OAuthSessionInfo -> System.currentTimeMillis() - OAuthSessionInfo.getExpire() >= (120 * 1000));
+    public void deleteByUsername(String username) {
+        findExpired(OAuthSessionInfo -> System.currentTimeMillis() - OAuthSessionInfo.getExpire() >= (180 * 1000));
         deque.removeIf(OAuthSessionInfo -> OAuthSessionInfo.getUsername().equals(username));
+    }
+
+    @Override
+    public void deleteByBearer(String bearer) {
+        findExpired(OAuthSessionInfo -> System.currentTimeMillis() - OAuthSessionInfo.getExpire() >= (180 * 1000));
+        deque.removeIf(OAuthSessionInfo -> OAuthSessionInfo.getAccessToken().equals(bearer));
     }
 
     @Scheduled(cron = "0/50 * *  * * ? ")
     public void execute() {
-        findExpired(OAuthSessionInfo -> System.currentTimeMillis() - OAuthSessionInfo.getExpire() >= (120 * 1000));
+        findExpired(OAuthSessionInfo -> System.currentTimeMillis() - OAuthSessionInfo.getExpire() >= (180 * 1000));
     }
 }

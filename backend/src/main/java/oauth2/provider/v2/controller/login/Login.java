@@ -53,22 +53,21 @@ public class Login {
     @RequestLimit
     public Object doLogin(@Validated @RequestBody LoginFormPreview LoginForm, HttpServletRequest request) throws Exception {
         try {
-            if(UserAuthenticateService.attemptLogin(LoginForm.keywords(), LoginForm.password())) {
-                var user = UserAuthenticateService.getLoginUserEntity(LoginForm.keywords());
+            UserAuthenticateService.attemptLogin(LoginForm.keywords(), LoginForm.password());
+            var user = UserAuthenticateService.getLoginUserEntity(LoginForm.keywords());
 
-                this.UserAuthenticateService.updateLastLoginIp(LoginForm.keywords(), request.getRemoteAddr());
-                Date date = new Date(System.currentTimeMillis());
-                String date2 = DateUtil.format(date);
+            this.UserAuthenticateService.updateLastLoginIp(LoginForm.keywords(), request.getRemoteAddr());
+            Date date = new Date(System.currentTimeMillis());
+            String date2 = DateUtil.format(date);
 
-                var loginResp = LoginResp.make(user.getEmail(), user.getUsername(), user.getUserTotp(), request.getRemoteAddr(), date2);
+            var loginResp = LoginResp.make(user.getEmail(), user.getUsername(), user.getUserTotp(), request.getRemoteAddr(), date2);
 
-                var SessionInfo = new HashMap<>();
-                SessionInfo.put("SessionID", AESUtil.encrypt(JSONWebToken.generateToken(new ObjectMapper().writeValueAsString(loginResp))));
+            var SessionInfo = new HashMap<>();
+            SessionInfo.put("SessionID", AESUtil.encrypt(JSONWebToken.generateToken(new ObjectMapper().writeValueAsString(loginResp))));
 
-                LoginSuccessHandler.handle(LoginForm.keywords(), LoginForm.password(), request.getRemoteAddr(), date2);
+            LoginSuccessHandler.handle(LoginForm.keywords(), LoginForm.password(), request.getRemoteAddr(), date2);
 
-                return SessionInfo;
-            }
+            return SessionInfo;
         } catch(Exception e) {
             Date date = new Date(System.currentTimeMillis());
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -78,7 +77,5 @@ public class Login {
 
             throw new BadCredentialsException(e.getMessage());
         }
-
-        return null;
     }
 }

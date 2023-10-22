@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @BearerController
 public class DefaultUserInfo {
 
-    // OAuth2.0 Resource get #3
     @RequestMapping(value = "/default/user/info", method = RequestMethod.GET)
     public Object responseInfo() throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserEntity userInfo = (UserEntity) authentication.getPrincipal();
         return new UserEntity(null, userInfo.getUsername(), userInfo.getLastLoginDate());
     }
+
 }
