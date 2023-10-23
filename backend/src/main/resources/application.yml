@@ -1,4 +1,8 @@
 server:
+  error:
+    whitelabel:
+      enabled: false
+
   port: 8080
   host: localhost
   servlet:
@@ -42,6 +46,7 @@ spring:
         queue-capacity: 10
         keep-alive: 60s
         allow-core-thread-timeout: true
+
       shutdown:
         await-termination: false
         await-termination-period:
@@ -50,7 +55,7 @@ spring:
   mail:
     host: test
     port: 25
-    username: test@oauth2-provider
+    username: test@oauth2-provider.net
     password: 123
 
   datasource:
@@ -59,6 +64,7 @@ spring:
     url: jdbc:mysql://localhost:3306/oauth2_provider
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource
+
     hikari:
       maximun-pool-size: 60
 

@@ -8,7 +8,6 @@ group = 'com.github.2544632b'
 version = '2.0.1'
 sourceCompatibility = '17'
 
-
 repositories {
 	maven {
 		url "https://repo1.maven.org/maven2"

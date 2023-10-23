@@ -9,14 +9,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-/*
- *  Platform: Windows 11 22H2 22621.1413
- *  Java version: 17.0.7 2023-04-18 LTS
- *  Java(TM) SE Runtime Environment Oracle GraalVM: build 17.0.7+8-LTS-jvmci-23.0-b12
- *  Java HotSpot(TM) 64-Bit Server VM Oracle GraalVM: build 17.0.7+8-LTS-jvmci-23.0-b12, mixed mode, sharing
- */
-
-
 @MapperScan(basePackages = "oauth2.provider.v2.user.mapper")
 
 @SpringBootApplication
