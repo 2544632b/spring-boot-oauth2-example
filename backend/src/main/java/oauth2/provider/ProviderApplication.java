@@ -9,7 +9,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@MapperScan(basePackages = "oauth2.provider.v2.user.mapper")
+@MapperScan(basePackages = "oauth2.provider.user.mapper")
 
 @SpringBootApplication
 @EnableCaching
