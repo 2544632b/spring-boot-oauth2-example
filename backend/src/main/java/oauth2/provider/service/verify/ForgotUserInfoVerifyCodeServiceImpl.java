@@ -9,6 +9,8 @@ import oauth2.provider.util.random.RandomVerifyCode;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
+
 @Service("ForgotUserInfoVerifyCodeService")
 public class ForgotUserInfoVerifyCodeServiceImpl implements VerifyCodeService {
 
@@ -31,6 +33,7 @@ public class ForgotUserInfoVerifyCodeServiceImpl implements VerifyCodeService {
     public void addVerifyCode(UserEntity user) {
         String email = user.getEmail();
         int code = RandomVerifyCode.getVerifyCode();
+
         if(queue.insert(user, code)) {
             EmailSenderService.send(email, EmailSenderService.applicationName, "Your verification code is " + code + " .");
         }

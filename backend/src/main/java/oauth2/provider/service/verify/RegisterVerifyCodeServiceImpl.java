@@ -8,7 +8,11 @@ import oauth2.provider.util.checker.EmailStringChecker;
 import oauth2.provider.service.base.email.EmailSenderService;
 import jakarta.annotation.Resource;
 import org.apache.commons.text.StringEscapeUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
 
 @Service("RegisterVerifyCodeService")
 public class RegisterVerifyCodeServiceImpl implements VerifyCodeService {
@@ -31,6 +35,7 @@ public class RegisterVerifyCodeServiceImpl implements VerifyCodeService {
     @Override
     public void addVerifyCode(UserEntity user) {
         int code = RandomVerifyCode.getVerifyCode();
+
         if(queue.insert(user, code)) {
             EmailSenderService.send(user.getEmail(), EmailSenderService.applicationName,"Your verification code is: " + code + " .");
         }

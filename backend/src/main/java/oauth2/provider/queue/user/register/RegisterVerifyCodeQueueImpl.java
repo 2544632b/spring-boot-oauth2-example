@@ -8,6 +8,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
 
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Repository
@@ -16,7 +17,7 @@ public class RegisterVerifyCodeQueueImpl extends AbstractCodeQueue<VerifyCodeInf
     @Resource
     private RedisTemplate<Object, Object> redisTemplate;
 
-    private boolean isRedis = true;
+    public boolean isRedis = true;  // Enable or disable the redis
 
     public RegisterVerifyCodeQueueImpl() {
         super();
@@ -30,29 +31,50 @@ public class RegisterVerifyCodeQueueImpl extends AbstractCodeQueue<VerifyCodeInf
      */
     @Override
     public boolean insert(UserEntity userInfo, int code) {
-        /*
-        if(isRedis) {
-            Set<Object> keys = redisTemplate.keys("*");
-            //assert keys != null;
-            for(Object key : keys) {
-                System.out.println(key);
-                UserEntity val = (UserEntity) redisTemplate.opsForValue().get(key);
-                //assert val != null;
-                if(userInfo.getUsername().equals(val.getUsername()) || userInfo.getEmail().equals(val.getEmail())) {
-                    return false;
+        try {
+            // #ifdef isRedis
+            if(isRedis) {
+                Set<Object> keys = redisTemplate.keys("*");
+                assert keys != null;
+                for(Object key : keys) {
+                    UserEntity val = (UserEntity) redisTemplate.opsForValue().get(key);
+                    assert val != null;
+                    if(String.valueOf(key).charAt(0) == 'R') {
+                        String codeStr = "R" + code;
+                        if(
+                                String.valueOf(key).equals(codeStr)
+                                        || userInfo.getUsername().equals(val.getUsername())
+                                        || userInfo.getEmail().equals(val.getEmail())
+                        ) {
+                            return false;
+                        }
+                    }
                 }
             }
-
-            redisTemplate.opsForValue().set(String.valueOf(code), userInfo, 50000, TimeUnit.MICROSECONDS);
-            return true;
+            // #endif
+        } catch(Exception e) {
+            // SKIP
         }
-        */
 
         findExpired(VerifyCodeInfo -> System.currentTimeMillis() - VerifyCodeInfo.getExpire() >= 50000);
         for (VerifyCodeInfo verifyCodeInfo : queue) {
-            if (verifyCodeInfo.getLoginUserEntity().getEmail().equals(userInfo.getEmail())) {
+            if(
+                    code == verifyCodeInfo.getCode()
+                    || verifyCodeInfo.getLoginUserEntity().getEmail().equals(userInfo.getEmail())
+                    || verifyCodeInfo.getLoginUserEntity().getUsername().equals(userInfo.getUsername())
+            ) {
                 return false;
             }
+        }
+        try {
+            // #ifdef isRedis
+            if(isRedis) {
+                redisTemplate.opsForValue().set("R" + code, userInfo, 500000, TimeUnit.MILLISECONDS);
+                return true;
+            }
+            // #endif
+        } catch(Exception e) {
+            // SKIP
         }
 
         add(new VerifyCodeInfo(userInfo, code));
@@ -71,24 +93,25 @@ public class RegisterVerifyCodeQueueImpl extends AbstractCodeQueue<VerifyCodeInf
      */
     @Override
     public UserEntity find(String email, int code) {
-        /*
-        if(isRedis) {
-            Set<Object> keys = redisTemplate.keys("*");
-            //assert keys != null;
-            for(Object key : keys) {
+        try {
+            // #ifdef isRedis
+            if(isRedis) {
+                String key = "R" + code;
                 UserEntity val = (UserEntity) redisTemplate.opsForValue().get(key);
-                //assert val != null;
-                if(email.equals(val.getEmail()) && String.valueOf(code).equals(key)) {
+
+                assert val != null;
+                if(val.getEmail().equals(email)) {
                     redisTemplate.delete(key);
                     return val;
                 }
             }
+            // #endif
+        } catch(Exception e) {
+            // SKIP
         }
-        */
-
         findExpired(VerifyCodeInfo -> System.currentTimeMillis() - VerifyCodeInfo.getExpire() >= 50000);
-        for (VerifyCodeInfo verifyCodeInfo : queue) {
-            if (verifyCodeInfo.getLoginUserEntity().getEmail().equals(email) &&
+        for(VerifyCodeInfo verifyCodeInfo : queue) {
+            if(verifyCodeInfo.getLoginUserEntity().getEmail().equals(email) &&
                     code == verifyCodeInfo.getCode()
             ) {
                 try {
@@ -105,9 +128,11 @@ public class RegisterVerifyCodeQueueImpl extends AbstractCodeQueue<VerifyCodeInf
                 }
             }
         }
+
         return null;
     }
 
+    // Internal queue
     @Scheduled(cron = "0/50 * *  * * ? ")
     public void execute() {
         findExpired(VerifyCodeInfo -> System.currentTimeMillis() - VerifyCodeInfo.getExpire() >= 50000);
