@@ -116,6 +116,8 @@
     }
     export default defineComponent({
         setup() {
+            document.title = "Sign up";
+
             const formState = reactive<FormState>({
                 email: '',
                 code: '',

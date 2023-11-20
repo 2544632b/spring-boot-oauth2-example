@@ -3,7 +3,9 @@
         <a-card style="opacity: 0.95;">
             <a-row type="flex" :gutter="[24,24]" justify="space-around" align="middle">
                 <a-col :span="24" :md="12" :lg="{span: 12, offset: 0}" :xl="{span: 6, offset: 2}" style="text-align: center">
-                    <img class="avatar" :src="'https://gravatar.loli.net/avatar/' + email" :alt="email" width="80" height="80">
+                    <template v-if="email">
+                        <img class="avatar" :src="'https://gravatar.loli.net/avatar/' + email" :alt="email" width="80" height="80">
+                    </template>
                     <h2>{{ username }}</h2>
                     <p v-if="email || username">{{ email }}</p>
                     <p>Last login: {{ login }}</p>
@@ -96,7 +98,7 @@
                     login.value = response.data.lastLoginDate;
                 })
                 .catch((error) => {
-                    message.error("Session expired")
+                    message.error(error.response.data.reason)
                     window.location.href = BaseURL + "/logout"
                 })
 
@@ -107,7 +109,7 @@
                         "X-Access-Token": VueCookies.get("SESSIONID"),
                     }
                 })
-                    .then(function (response) {
+                    .then((response) => {
                         if (response.data.statusCode == 200) {
                             VueCookies.remove("SESSIONID")
                             message.info(response.data.reason);
@@ -116,8 +118,8 @@
                             message.error(response.data.reason)
                         }
                     })
-                    .catch(function (error) {
-                        message.error("Session expired");
+                    .catch((error) => {
+                        message.error(error.response.data.reason);
                         window.location.href = BaseURL + "/logout";
                     })
             };

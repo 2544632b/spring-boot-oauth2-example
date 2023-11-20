@@ -123,6 +123,8 @@
     
     export default defineComponent({
         setup() {
+            document.title = "Sign in";
+
             const uuid = self.crypto.randomUUID();
             sessionStorage.setItem("STATE_UUID", uuid);
             const githubURL = "https://github.com/login/oauth/authorize?client_id=CLIENT_ID&redirect_uri=http://localhost/authorize/github/continue&scope=user&state=" + uuid + "&response_type=code";

@@ -19,17 +19,19 @@
                         <p>Click confirm and app will be authorized.</p>
                         <a-space>
                             <a-button type="primary" html-type="submit" class="login-form-button" @click="onFinish">
-                                Confirm authorize
+                                Confirm
                             </a-button>
                         </a-space>
                     </template>
                     <template v-if="!AppName">
-                        <p>Unknown application</p>
+                        <p>404 Not found</p>
+                        <!--
                         <a-space>
-                            <a-button type="primary" html-type="submit" class="login-form-button" @click="onFinish" disabled>
-                                Confirm authorize
+                            <a-button type="primary" html-type="submit" class="login-form-button" @click="onFinish">
+                                Confirm
                             </a-button>
                         </a-space>
+                        -->
                     </template>
                 </a-form-item>
             </a-form>
@@ -44,6 +46,8 @@
     import { getQueryParams } from '@adso-ts/get-query-params';
     export default defineComponent({
         setup() {
+            document.title = "Authorization Required";
+            
             const paramsObject = getQueryParams(decodeURIComponent(window.location.href));
 
             const AppName = ref('');

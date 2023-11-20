@@ -25,6 +25,8 @@
 
     export default defineComponent({
         setup() {
+            document.title = "Continue";
+
             const paramsObject = getQueryParams(decodeURIComponent(window.location.href));
             const requestBody = {
                 code: paramsObject.code,

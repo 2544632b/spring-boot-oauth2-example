@@ -96,8 +96,11 @@ const router = createRouter({
             meta: {
                 requireAuth: true
             }
+        },
+        {
+            path: BaseURL + '/:catchAll(.*)',
+            redirect: BaseURL + '/'
         }
-
     ]
 })
 

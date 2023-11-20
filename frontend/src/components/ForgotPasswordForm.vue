@@ -107,6 +107,8 @@
     }
     export default defineComponent({
         setup() {
+            document.title = "Forgot password";
+
             const formState = reactive<FormState>({
                 email: ''
             });
