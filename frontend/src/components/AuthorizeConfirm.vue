@@ -1,6 +1,6 @@
 <template>
     <div style="padding: 30px; padding-top: 95px;">
-        <a-card title="确认授权" :bordered="false" style="width: 100%; background: #fff; opacity: 0.95" >
+        <a-card title="Authorization Required" :bordered="false" style="width: 100%; background: #fff; opacity: 0.95" >
             <a-form
                     name="normal_login"
                     class="login-form"
