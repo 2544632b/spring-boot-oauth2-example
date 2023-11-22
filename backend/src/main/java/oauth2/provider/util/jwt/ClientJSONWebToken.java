@@ -12,7 +12,7 @@ public class ClientJSONWebToken extends AbstractJSONWebToken {
 
     public ClientJSONWebToken(String secret) {
         super.secret = secret;
-        super.algorithm = SignatureAlgorithm.HS512;
+        super.algorithm = SignatureAlgorithm.RS256;
         super.JSON_WEB_TOKEN_VALIDITY = 240;
     }
 

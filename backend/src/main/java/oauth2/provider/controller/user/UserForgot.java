@@ -20,6 +20,7 @@ public class UserForgot {
     private ForgotUserInfoService ForgotUserInfoService;
 
     @RequestMapping(value = "/user/forgot/password/email", method = RequestMethod.POST)
+    @RequestLimit
     public Object resetPasswordEmail(@Validated @RequestBody ForgotPasswordForm ForgotPasswordForm) throws UsernameNotFoundException {
         if(!ForgotPasswordForm.getEmail().isEmpty()) {
             ForgotUserInfoService.addVerifyCodeFromEmail(ForgotPasswordForm.getEmail());

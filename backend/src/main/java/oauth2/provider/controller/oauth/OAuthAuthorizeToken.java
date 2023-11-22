@@ -23,19 +23,6 @@ public class OAuthAuthorizeToken {
     @Resource
     private BCryptPasswordEncoder bc;
 
-    /***
-     * OAuth2.0 / Open ID Connect 1.0 #2 (Token End point)
-     * Publicly for third party web.
-     *
-     * @param code
-     * Code param: <strong>Required</strong>
-     *
-     * @param clientId
-     * Client ID: <strong>Required</strong>
-     *
-     * @param secret
-     * Client Secret: <strong>Required</strong>
-     */
     @RequestMapping(value = "/oauth/token", method = RequestMethod.POST)
     public Object getToken(
             @RequestParam("code") String code,
@@ -47,7 +34,6 @@ public class OAuthAuthorizeToken {
 
         if(bc.matches(secret, oauthInfo.getClientSecret())
                 && grantType.equals("authorization_code")) {
-
             return OAuthSessionInfoService.generateAccessToken(clientId, code);
         }
 

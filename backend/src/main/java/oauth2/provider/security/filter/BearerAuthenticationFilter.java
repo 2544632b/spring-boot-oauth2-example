@@ -1,6 +1,8 @@
 package oauth2.provider.security.filter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import oauth2.provider.authentication.token.UsernamePasswordAuthenticationToken;
+import oauth2.provider.model.form.response.Response;
 import oauth2.provider.model.user.info.entity.UserEntity;
 import oauth2.provider.service.base.user.UserEntityService;
 import oauth2.provider.service.oauth.server.OAuthSessionInfoService;
@@ -16,6 +18,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Map;
 
 
@@ -64,6 +67,7 @@ public class BearerAuthenticationFilter extends OncePerRequestFilter {
 
         // OAuth 2.0 Token
         final String userBearer = request.getHeader("Authorization");
+        OutputStream os = response.getOutputStream();
 
         // had bearer
         if(userBearer != null) {
@@ -78,6 +82,8 @@ public class BearerAuthenticationFilter extends OncePerRequestFilter {
                     ) {
                         logger.info("{} -> {} was disabled, please contact with administrator.", user.getEmail(), user.getUsername());
                         response.setStatus(403);
+                        os.write(new ObjectMapper().writeValueAsString(Response.responseForbidden(user.getEmail() + " was disabled, please contact with administrator.")).getBytes());
+                        os.flush();
                         return;
                     }
 
@@ -85,6 +91,8 @@ public class BearerAuthenticationFilter extends OncePerRequestFilter {
                     String targetScope = (url2Scope.get(request.getRequestURI()) == null) ? null : url2Scope.get(request.getRequestURI());
                     if(targetScope == null) {
                         response.setStatus(403);
+                        os.write(new ObjectMapper().writeValueAsString(Response.responseForbidden("Access denied")).getBytes());
+                        os.flush();
                         return;
                     }
 
@@ -98,6 +106,8 @@ public class BearerAuthenticationFilter extends OncePerRequestFilter {
                     }
                     if(!match) {
                         response.setStatus(403);
+                        os.write(new ObjectMapper().writeValueAsString(Response.responseForbidden("Access denied")).getBytes());
+                        os.flush();
                         return;
                     }
 
@@ -105,14 +115,20 @@ public class BearerAuthenticationFilter extends OncePerRequestFilter {
                     usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 
+                    filterChain.doFilter(request, response);
+                    return;
                 } catch(Exception e) {
                     logger.info("Can not validate the bearer token " + type[1] + ".");
                     response.setStatus(401);
+                    os.write(new ObjectMapper().writeValueAsString(Response.responseNotAuthorized("Not Authorized")).getBytes());
+                    os.flush();
                     return;
                 }
             }
 
             response.setStatus(401);
+            os.write(new ObjectMapper().writeValueAsString(Response.responseNotAuthorized("Not Authorized")).getBytes());
+            os.flush();
             return; //
         }
 
@@ -130,6 +146,8 @@ public class BearerAuthenticationFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
             } else {        // Is resource url
                 response.setStatus(401);
+                os.write(new ObjectMapper().writeValueAsString(Response.responseNotAuthorized("Not Authorized")).getBytes());
+                os.flush();
             }
         }
     }

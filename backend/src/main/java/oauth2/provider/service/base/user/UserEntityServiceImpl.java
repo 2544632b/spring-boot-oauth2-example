@@ -28,6 +28,7 @@ public class UserEntityServiceImpl implements UserEntityService {
     @Transactional
     public void deleteUser(String id) {
         // Noting to do with
+        //
     }
 
     @Override

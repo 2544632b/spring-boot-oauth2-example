@@ -3,7 +3,7 @@ package oauth2.provider.queue.user.forgot;
 import jakarta.annotation.Resource;
 import oauth2.provider.queue.factory.AbstractCodeQueue;
 import oauth2.provider.model.user.info.entity.UserEntity;
-import oauth2.provider.model.user.info.deque.VerifyCodeInfo;
+import oauth2.provider.model.user.info.queue.VerifyCodeInfo;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;

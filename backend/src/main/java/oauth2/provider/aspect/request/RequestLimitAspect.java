@@ -3,7 +3,7 @@ package oauth2.provider.aspect.request;
 import jakarta.servlet.http.HttpServletRequest;
 import oauth2.provider.annotation.request.RequestLimit;
 import oauth2.provider.queue.factory.AbstractCodeQueue;
-import oauth2.provider.model.user.info.deque.RequestInfo;
+import oauth2.provider.model.user.info.queue.RequestInfo;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;

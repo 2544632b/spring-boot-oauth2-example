@@ -50,9 +50,9 @@ public class GithubOAuthServiceImpl implements GithubOAuthService {
     @Override
     @RetryAfterException(times = 5, interval = 1)
     public Object getUserInfo(String state, String code, String currentIp) throws Exception {
-        // Noting to do with `state` because of state already completed on browser session storage.
+        // Noting to do with `state` because of state already completed on browser.
 
-        // Get the access token of a user.
+        // Get an access token.
         String githubURL = "https://github.com/login/oauth/access_token";
         HttpHeaders httpHeaders1 = new HttpHeaders();
 
@@ -61,19 +61,17 @@ public class GithubOAuthServiceImpl implements GithubOAuthService {
         form.add("client_id", "INVALID_ID");  // GitHub Client ID
         form.add("client_secret", "INVALID_SECRET");  // GitHub Client Secret
         form.add("code", StringEscapeUtils.escapeJava(code));   // Authorization code
-        form.add("grant_type", "authorization_code");   // Standard param, see the RFC for OAuth 2.0
-        form.add("redirect_uri", "http://localhost/authorize/github/continue"); // Redirect to front end
+        form.add("grant_type", "authorization_code");   // Authorization code only, see RFC 6749.
 
         HttpEntity<MultiValueMap<String, String>> request1 = new HttpEntity<>(form, httpHeaders1);
         ResponseEntity<GithubTokenResp> response1 = restTemplate.postForEntity(githubURL, request1, GithubTokenResp.class);
 
-        // Get the user info
+        // Get the user info.
         String githubUserInfoURL = "https://api.github.com/user";
         HttpHeaders httpHeaders2 = new HttpHeaders();
         httpHeaders2.setBearerAuth(Objects.requireNonNull(response1.getBody()).getAccessToken());
-        httpHeaders2.set("X-GitHub-Api-Version", "2022-11-28"); // Last API Version
-        HttpEntity<String> request2 = new HttpEntity<>("", httpHeaders2);   // Only post can set the http headers
-        //ResponseEntity<GithubUserProfileResp> response2 = restTemplate.postForEntity(githubUserInfoURL, request2, GithubUserProfileResp.class);
+        httpHeaders2.set("X-GitHub-Api-Version", "2022-11-28"); // Latest API Version
+        HttpEntity<String> request2 = new HttpEntity<>("", httpHeaders2);
         ResponseEntity<GithubUserProfileResp> response2 = restTemplate.exchange(githubUserInfoURL, HttpMethod.GET, request2, GithubUserProfileResp.class);
 
         String username = Objects.requireNonNull(response2.getBody()).getLogin();

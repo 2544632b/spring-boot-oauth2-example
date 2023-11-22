@@ -44,7 +44,6 @@ public class GlobalExceptionHandler {
 
         format.clear();
 
-        e.printStackTrace();
 
         return Response.responseError("Internal Error");
     }
@@ -52,7 +51,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = NullPointerException.class)
     @ResponseBody
     public Object nullPointerResponse(NullPointerException n) {
-        n.printStackTrace();
         return Response.responseResultNotFound("Mismatch information");
     }
 

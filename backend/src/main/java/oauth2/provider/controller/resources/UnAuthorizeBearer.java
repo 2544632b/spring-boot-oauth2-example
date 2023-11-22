@@ -21,4 +21,5 @@ public class UnAuthorizeBearer {
         UserEntity userInfo = OAuthSessionInfoService.getUserEntityFromBearer(texts[1]);
         OAuthSessionInfoService.deleteOAuthSessionInfoByUsername(userInfo.getUsername());
     }
+
 }

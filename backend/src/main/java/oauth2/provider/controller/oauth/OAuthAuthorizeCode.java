@@ -24,9 +24,6 @@ public class OAuthAuthorizeCode {
     @Resource
     private OAuthEntityService oauthEntity;
 
-    /**
-     * OAuth2.0 / Open ID Connect 1.0 #1 (Authorize End Point)
-     */
     @RequestMapping(value = "/oauth/authorize", method = RequestMethod.POST)
     public Object getCode(@Validated @RequestBody OAuthAuthorizeForm OAuthAuthorizeForm) throws Exception {
         OAuthEntity oauthInfo = oauthEntity.findByClientId(StringEscapeUtils.escapeJava(OAuthAuthorizeForm.getClientId()));

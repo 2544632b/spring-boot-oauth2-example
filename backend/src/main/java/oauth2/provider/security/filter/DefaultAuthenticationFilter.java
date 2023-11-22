@@ -1,7 +1,9 @@
 package oauth2.provider.security.filter;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import oauth2.provider.authentication.token.UsernamePasswordAuthenticationToken;
+import oauth2.provider.model.form.response.Response;
 import oauth2.provider.model.user.info.entity.UserEntity;
 import oauth2.provider.service.base.user.UserEntityService;
 import oauth2.provider.util.aes.AESUtil;
@@ -18,6 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 
 
@@ -60,8 +63,8 @@ public class DefaultAuthenticationFilter extends OncePerRequestFilter {
         response.setHeader("Set-Cookie", "HttpOnly;Secure;SameSite=None");
 
         final String encryptedToken = request.getHeader("X-Access-Token");
-        String userToken;
-        String decryptedToken = null;
+        String userToken, decryptedToken;
+        OutputStream os = response.getOutputStream();
 
         List<String> urls = List.of(
                 "/login",
@@ -69,8 +72,9 @@ public class DefaultAuthenticationFilter extends OncePerRequestFilter {
                 "/register/verify",
                 "/user/forgot/password/email",
                 "/user/forgot/password/email/verify",
-                "/oauth/token",
-                "/oauth/client/continue/github",
+
+                "/oauth/token", // Server side access, see https://www.rfc-editor.org/rfc/rfc6749.html
+                "/oauth/client/continue/github", // -> "/login" (Publicly request)
 
                 // Different list with bearer filter
                 "/default/user/info"
@@ -93,12 +97,14 @@ public class DefaultAuthenticationFilter extends OncePerRequestFilter {
                                 userjson.getString("login")
                         );
 
+                        /*
                         logger.info("{} -> {} passed {}, last login: {}.",
                                 userjson.getString("email"),
                                 userjson.getString("username"),
                                 DefaultAuthenticationFilter.class,
                                 userjson.getString("login")
                         );
+                        */
 
                         if(!userEntity.findByEmail(userjson.getString("email")).isEnabled()
                                 || !userEntity.findByUsername(userjson.getString("username")).isEnabled()
@@ -106,6 +112,8 @@ public class DefaultAuthenticationFilter extends OncePerRequestFilter {
                         ) {
                             logger.info("{} -> {} was disabled, please contact with administrator.", userjson.getString("email"), userjson.getString("username"));
                             response.setStatus(403);
+                            os.write(new ObjectMapper().writeValueAsString(Response.responseForbidden(userjson.get("email") + " was disabled, please contact with administrator.")).getBytes());
+                            os.flush();
                             return;
                         }
 
@@ -119,15 +127,21 @@ public class DefaultAuthenticationFilter extends OncePerRequestFilter {
             } catch(IllegalArgumentException e) {
                 logger.info("Unable to get the token");
                 response.setStatus(401);
+                os.write(new ObjectMapper().writeValueAsString(Response.responseNotAuthorized("Not Authorized")).getBytes());
+                os.flush();
                 return;
             } catch(ExpiredJwtException e) {
                 logger.info("Expired token {}", encryptedToken);
                 response.setStatus(401);
+                os.write(new ObjectMapper().writeValueAsString(Response.responseNotAuthorized("Not Authorized")).getBytes());
+                os.flush();
                 return;
             } catch(Exception e) {
                 e.printStackTrace();
                 logger.info("Can not validate some request {}", encryptedToken);
                 response.setStatus(401);
+                os.write(new ObjectMapper().writeValueAsString(Response.responseNotAuthorized("Not Authorized")).getBytes());
+                os.flush();
                 return;
             }
 
@@ -137,10 +151,13 @@ public class DefaultAuthenticationFilter extends OncePerRequestFilter {
             for(String url : urls) {
                 if (request.getRequestURI().equals(url)) {
                     filterChain.doFilter(request, response);
+                    return; // Quit
                 }
             }
 
             response.setStatus(401);
+            os.write(new ObjectMapper().writeValueAsString(Response.responseNotAuthorized("Not Authorized")).getBytes());
+            os.flush();
         }
     }
 }

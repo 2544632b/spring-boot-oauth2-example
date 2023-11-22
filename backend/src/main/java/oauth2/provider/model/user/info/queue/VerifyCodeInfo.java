@@ -1,4 +1,4 @@
-package oauth2.provider.model.user.info.deque;
+package oauth2.provider.model.user.info.queue;
 
 import oauth2.provider.model.user.info.entity.UserEntity;
 

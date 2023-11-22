@@ -5,9 +5,12 @@ server:
 
   port: 8080
   host: localhost
+
+  http2:
+    enabled: true
   servlet:
     session:
-      timeout: 1600s
+      enabled: false
 
   tomcat:
     max-connections: 1000
