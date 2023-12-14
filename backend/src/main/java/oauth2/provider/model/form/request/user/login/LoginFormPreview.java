@@ -5,10 +5,9 @@ import jakarta.validation.constraints.Pattern;
 
 public record LoginFormPreview(
         @NotBlank
-        @Pattern(regexp = "^.{5,20}$", message = "用户名或电子邮件不能少于5个字符。")
+        @Pattern(regexp = "^.{5,20}$", message = "Username or email is not valid.")
         String keywords,
-
         @NotBlank
-        @Pattern(regexp = "^.{5,20}$", message = "密码不能少于5个字符。")
+        @Pattern(regexp = "^.{5,20}$", message = "Password is not valid.")
         String password
 ) {}

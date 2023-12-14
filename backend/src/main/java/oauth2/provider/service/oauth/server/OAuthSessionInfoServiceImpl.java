@@ -1,10 +1,13 @@
 package oauth2.provider.service.oauth.server;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import oauth2.provider.queue.user.oauth.OAuthSessionQueue;
 import oauth2.provider.model.user.info.entity.UserEntity;
 import oauth2.provider.model.form.response.oauth.OAuthAuthorizeTokenResp;
 import oauth2.provider.model.user.info.oauth.server.OAuthSessionInfo;
-import oauth2.provider.service.base.user.UserEntityService;
+import oauth2.provider.service.profile.user.entity.UserEntityService;
+import oauth2.provider.util.jwt.ClientJSONWebToken;
 import oauth2.provider.util.random.RandomPassword;
 import jakarta.annotation.Resource;
 import org.apache.commons.text.StringEscapeUtils;
@@ -21,6 +24,9 @@ public class OAuthSessionInfoServiceImpl implements OAuthSessionInfoService {
 
     @Resource
     private RandomPassword RandomPassword;
+
+    @Resource
+    private ClientJSONWebToken ClientJSONWebToken;
 
     @Override
     public String generateCode(String clientId, String scope, String username) {
@@ -45,6 +51,26 @@ public class OAuthSessionInfoServiceImpl implements OAuthSessionInfoService {
 
         // Final actions
         return new OAuthAuthorizeTokenResp(accessToken, null);
+    }
+
+    // OpenID JWT
+    @Override
+    public OAuthAuthorizeTokenResp generateIdToken(String clientId, String code) {
+        // Only in once, authorize code will delete after this
+        OAuthSessionInfo info = queue.find(StringEscapeUtils.escapeJava(clientId), StringEscapeUtils.escapeJava(code));
+
+        // Get the open id profile
+        String username = info.getUsername();
+
+        Claims claims = Jwts.claims();
+        claims.put("iss", "http://localhost/");
+        claims.put("aud", StringEscapeUtils.escapeJava(clientId));
+        claims.put("idp", "test");
+        String idToken = ClientJSONWebToken.doGenerateToken(claims, username);
+
+        deleteOAuthSessionInfoByUsername(username);
+
+        return new OAuthAuthorizeTokenResp(null, idToken);
     }
 
     @Override

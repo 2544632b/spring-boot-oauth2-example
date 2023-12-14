@@ -5,11 +5,13 @@ import jakarta.validation.constraints.Pattern;
 import java.io.Serializable;
 
 public class ForgotPasswordForm implements Serializable {
+
     @NotBlank
-    @Pattern(regexp = "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$")
+    @Pattern(regexp = "^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$", message = "Invalid email")
     private String email;
 
     public String getEmail() {
         return email;
     }
+
 }

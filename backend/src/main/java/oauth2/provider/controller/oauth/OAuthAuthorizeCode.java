@@ -3,7 +3,7 @@ package oauth2.provider.controller.oauth;
 import oauth2.provider.annotation.controller.OAuthController;
 import oauth2.provider.model.form.request.oauth.OAuthAuthorizeForm;
 import oauth2.provider.model.user.info.entity.OAuthEntity;
-import oauth2.provider.service.base.oauth.OAuthEntityService;
+import oauth2.provider.service.oauth.server.entity.OAuthEntityService;
 import oauth2.provider.service.oauth.server.OAuthSessionInfoService;
 import jakarta.annotation.Resource;
 import org.apache.commons.text.StringEscapeUtils;

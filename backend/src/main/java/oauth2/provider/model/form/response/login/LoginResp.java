@@ -7,10 +7,15 @@ import java.io.Serializable;
 
 @JsonSerialize
 public class LoginResp implements Serializable {
+
     public String email;
+
     public String username;
+
     public String totp;
+
     public String ip;
+
     public String login;
 
     @JsonCreator

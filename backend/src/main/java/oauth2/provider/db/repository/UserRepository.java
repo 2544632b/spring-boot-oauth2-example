@@ -1,4 +1,4 @@
-package oauth2.provider.user.repository;
+package oauth2.provider.db.repository;
 
 import oauth2.provider.model.user.info.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,7 +10,8 @@ import org.springframework.stereotype.Repository;
 import java.math.BigInteger;
 
 @Repository
-public interface UserRepository extends JpaRepository<UserEntity, Long> {
+public interface UserRepository extends JpaRepository<UserEntity, String> {
+
     @Query(value = "select t from UserEntity t where t.username = :keywords or t.email = :keywords")
     UserEntity findByKeywords(@Param("keywords") String keywords);
 
@@ -30,4 +31,5 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     @Modifying
     @Query(value = "update UserEntity t set t.lastLoginIp = :ip where t.username = :keywords or t.email = :keywords")
     void updateLoginIp(@Param("keywords") String keywords, @Param("ip") String ip);
+
 }

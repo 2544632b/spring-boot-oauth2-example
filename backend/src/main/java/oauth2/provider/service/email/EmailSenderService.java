@@ -1,4 +1,4 @@
-package oauth2.provider.service.base.email;
+package oauth2.provider.service.email;
 
 public interface EmailSenderService {
     String applicationName = "Application";

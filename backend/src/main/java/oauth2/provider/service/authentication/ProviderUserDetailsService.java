@@ -1,6 +1,7 @@
-package oauth2.provider.service.base.user;
+package oauth2.provider.service.authentication;
 
 import jakarta.annotation.Resource;
+import oauth2.provider.service.profile.user.entity.UserEntityService;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

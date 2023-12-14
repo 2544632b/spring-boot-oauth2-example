@@ -73,11 +73,11 @@
                 message.loading("Requesting...", 0.5);
 
                 const authorizeRequestBody = {
-                    responseType: paramsObject.response_type,
-                    clientId: paramsObject.client_id,
+                    response_type: paramsObject.response_type,
+                    client_id: paramsObject.client_id,
                     scope: paramsObject.scope,
                     state: paramsObject.state,
-                    redirectURI: paramsObject.redirect_uri,
+                    redirect_uri: paramsObject.redirect_uri,
                 };
 
                 HttpInstance.post("/oauth/authorize", authorizeRequestBody, {

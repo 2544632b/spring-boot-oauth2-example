@@ -1,4 +1,4 @@
-package oauth2.provider.service.base.email;
+package oauth2.provider.service.email;
 
 import oauth2.provider.email.Email;
 import jakarta.annotation.Resource;

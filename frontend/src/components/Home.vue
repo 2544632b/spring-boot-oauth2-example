@@ -26,9 +26,9 @@
                             </a-input>
                         </a-form-item>
                         <a-form-item
-                                    name="newPassword"
+                                    name="new_password"
                                     :rules="[{ required: true, message: 'Please enter a new password' }]">
-                            <a-input v-model:value="formState.newPassword" type="password" placeholder="Enter new password...">
+                            <a-input v-model:value="formState.new_password" type="password" placeholder="Enter new password...">
                             </a-input>
                         </a-form-item>
                         <a-form-item style="text-align: center">
@@ -71,7 +71,7 @@
 
     interface FormState {
         password: string;
-        newPassword: string;
+        new_password: string;
     }
     export default defineComponent({
         setup() {

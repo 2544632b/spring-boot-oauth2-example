@@ -6,14 +6,15 @@ import oauth2.provider.model.form.response.login.LoginResp;
 import oauth2.provider.model.user.info.entity.UserEntity;
 import oauth2.provider.model.user.info.oauth.client.GithubTokenResp;
 import oauth2.provider.model.user.info.oauth.client.GithubUserProfileResp;
-import oauth2.provider.service.base.user.UserEntityService;
+import oauth2.provider.service.profile.user.entity.UserEntityService;
+import oauth2.provider.util.functional.FunctionalHttpHeaders;
+import oauth2.provider.util.functional.FunctionalLinkedMultiValueMap;
 import oauth2.provider.util.jwt.JSONWebToken;
 import oauth2.provider.util.aes.AESUtil;
 import jakarta.annotation.Resource;
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
@@ -54,23 +55,25 @@ public class GithubOAuthServiceImpl implements GithubOAuthService {
 
         // Get an access token.
         String githubURL = "https://github.com/login/oauth/access_token";
-        HttpHeaders httpHeaders1 = new HttpHeaders();
+        HttpHeaders httpHeaders1 = new FunctionalHttpHeaders()
+                .setContentTypeEx(MediaType.APPLICATION_FORM_URLENCODED).finish();
 
-        httpHeaders1.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
-        form.add("client_id", "INVALID_ID");  // GitHub Client ID
-        form.add("client_secret", "INVALID_SECRET");  // GitHub Client Secret
-        form.add("code", StringEscapeUtils.escapeJava(code));   // Authorization code
-        form.add("grant_type", "authorization_code");   // Authorization code only, see RFC 6749.
+        MultiValueMap<String, String> form = new FunctionalLinkedMultiValueMap<String, String>()
+                .addEx("client_id", "INVALID_ID") // GitHub Client ID
+                .addEx("client_secret", "INVALID_SECRET") // GitHub Client Secret
+                .addEx("code", StringEscapeUtils.escapeJava(code)) // Authorization code
+                .addEx("grant_type", "authorization_code") // Authorization code only, see RFC 6749.
+                .finish();
 
-        HttpEntity<MultiValueMap<String, String>> request1 = new HttpEntity<>(form, httpHeaders1);
+        HttpEntity<MultiValueMap<String, String>>   request1 = new HttpEntity<>(form, httpHeaders1);
         ResponseEntity<GithubTokenResp> response1 = restTemplate.postForEntity(githubURL, request1, GithubTokenResp.class);
 
         // Get the user info.
         String githubUserInfoURL = "https://api.github.com/user";
-        HttpHeaders httpHeaders2 = new HttpHeaders();
-        httpHeaders2.setBearerAuth(Objects.requireNonNull(response1.getBody()).getAccessToken());
-        httpHeaders2.set("X-GitHub-Api-Version", "2022-11-28"); // Latest API Version
+        HttpHeaders httpHeaders2 = new FunctionalHttpHeaders()
+                .setBearerAuthEx(Objects.requireNonNull(response1.getBody()).getAccessToken())
+                .setEx("X-GitHub-Api-Version", "2022-11-28")
+                .finish();
         HttpEntity<String> request2 = new HttpEntity<>("", httpHeaders2);
         ResponseEntity<GithubUserProfileResp> response2 = restTemplate.exchange(githubUserInfoURL, HttpMethod.GET, request2, GithubUserProfileResp.class);
 
@@ -86,8 +89,8 @@ public class GithubOAuthServiceImpl implements GithubOAuthService {
         var loginResp = LoginResp.make(user.getEmail(), user.getUsername(), null, currentIp, date2);
 
         // Transform to signature token
-        Map<String, String> SessionID = new HashMap<>();
-        SessionID.put("SessionID", AESUtil.encrypt(JSONWebToken.generateToken(new ObjectMapper().writeValueAsString(loginResp))));
-        return SessionID;
+        Map<String, String> session = new HashMap<>();
+        session.put("session_id", AESUtil.encrypt(JSONWebToken.generateToken(new ObjectMapper().writeValueAsString(loginResp))));
+        return session;
     }
 }

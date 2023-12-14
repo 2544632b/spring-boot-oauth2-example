@@ -1,7 +1,7 @@
 package oauth2.provider.service.authentication;
 
 import oauth2.provider.model.user.info.entity.UserEntity;
-import oauth2.provider.service.base.user.UserEntityService;
+import oauth2.provider.service.profile.user.entity.UserEntityService;
 import oauth2.provider.util.checker.EmailStringChecker;
 import oauth2.provider.util.checker.UsernameStringChecker;
 import oauth2.provider.util.checker.PasswordStringChecker;

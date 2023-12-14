@@ -11,8 +11,6 @@ import oauth2.provider.util.jwt.JSONWebToken;
 import oauth2.provider.util.aes.AESUtil;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,8 +44,6 @@ public class Login {
     @Resource
     private DateUtil DateUtil;
 
-    private static final Logger logger = LoggerFactory.getLogger(Login.class);
-
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @RequestLimit
     public Object doLogin(@Validated @RequestBody LoginFormPreview LoginForm, HttpServletRequest request) throws Exception {
@@ -61,12 +57,12 @@ public class Login {
 
             var loginResp = LoginResp.make(user.getEmail(), user.getUsername(), user.getUserTotp(), request.getRemoteAddr(), date2);
 
-            var SessionInfo = new HashMap<>();
-            SessionInfo.put("SessionID", AESUtil.encrypt(JSONWebToken.generateToken(new ObjectMapper().writeValueAsString(loginResp))));
+            var session = new HashMap<>();
+            session.put("session_id", AESUtil.encrypt(JSONWebToken.generateToken(new ObjectMapper().writeValueAsString(loginResp))));
 
             LoginSuccessHandler.handle(LoginForm.keywords(), LoginForm.password(), request.getRemoteAddr(), date2);
 
-            return SessionInfo;
+            return session;
         } catch(Exception e) {
             Date date = new Date(System.currentTimeMillis());
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

@@ -1,4 +1,4 @@
-package oauth2.provider.service.base.user;
+package oauth2.provider.service.profile.user.entity;
 
 import oauth2.provider.model.user.info.entity.UserEntity;
 

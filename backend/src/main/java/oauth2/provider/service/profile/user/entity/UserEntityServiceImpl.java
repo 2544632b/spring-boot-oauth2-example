@@ -1,6 +1,6 @@
-package oauth2.provider.service.base.user;
+package oauth2.provider.service.profile.user.entity;
 
-import oauth2.provider.user.repository.UserRepository;
+import oauth2.provider.db.repository.UserRepository;
 import oauth2.provider.model.user.info.entity.UserEntity;
 import jakarta.annotation.Resource;
 import jakarta.persistence.LockModeType;

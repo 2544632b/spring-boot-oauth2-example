@@ -43,8 +43,8 @@
             message.loading("Requesting...", 0.5);
             HttpInstance.post("/oauth/client/continue/github", requestBody)
                 .then(function (response) {
-                    if (response.data.SessionID) {
-                        VueCookies.set('SESSIONID', response.data.SessionID, {
+                    if (response.data.session_id) {
+                        VueCookies.set('SESSIONID', response.data.session_id, {
                             domain: 'localhost',
                             path: '/',
                             httpOnly: true,

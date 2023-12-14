@@ -2,17 +2,13 @@ package oauth2.provider.service.verify;
 
 import oauth2.provider.queue.user.register.RegisterVerifyCodeQueue;
 import oauth2.provider.model.user.info.entity.UserEntity;
-import oauth2.provider.service.base.user.UserEntityService;
+import oauth2.provider.service.profile.user.entity.UserEntityService;
 import oauth2.provider.util.random.RandomVerifyCode;
 import oauth2.provider.util.checker.EmailStringChecker;
-import oauth2.provider.service.base.email.EmailSenderService;
+import oauth2.provider.service.email.EmailSenderService;
 import jakarta.annotation.Resource;
 import org.apache.commons.text.StringEscapeUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-
-import java.util.Set;
 
 @Service("RegisterVerifyCodeService")
 public class RegisterVerifyCodeServiceImpl implements VerifyCodeService {

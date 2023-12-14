@@ -1,7 +1,6 @@
 package oauth2.provider.aspect.exception;
 
 import oauth2.provider.annotation.exception.RetryAfterException;
-import oauth2.provider.util.base.Operator;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -29,7 +28,7 @@ public class RetryAfterExceptionAspect {
                 error = t;
                 System.err.println("Something is not working, now retrying... #" + retryTimes);
             }
-            Thread.sleep(Operator.mul(retryInterval, (int)1000L));
+            Thread.sleep(1000L * retryInterval);
         }
 
         throw new RuntimeException("Can not finish the task after #" + maxRetryTimes + " ", error);

@@ -1,7 +1,7 @@
 package oauth2.provider.service.profile.user.change;
 
-import oauth2.provider.service.base.user.UserEntityService;
-import oauth2.provider.service.base.email.EmailSenderService;
+import oauth2.provider.service.profile.user.entity.UserEntityService;
+import oauth2.provider.service.email.EmailSenderService;
 import oauth2.provider.util.checker.PasswordStringChecker;
 import jakarta.annotation.Resource;
 import org.apache.commons.text.StringEscapeUtils;

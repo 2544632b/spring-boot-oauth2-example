@@ -2,14 +2,12 @@ package oauth2.provider.service.verify;
 
 import oauth2.provider.queue.user.forgot.ForgotVerifyCodeQueue;
 import oauth2.provider.model.user.info.entity.UserEntity;
-import oauth2.provider.service.base.email.EmailSenderService;
+import oauth2.provider.service.email.EmailSenderService;
 import oauth2.provider.service.profile.user.change.ChangeUserDetailsService;
 import oauth2.provider.util.random.RandomPassword;
 import oauth2.provider.util.random.RandomVerifyCode;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
-
-import java.util.Set;
 
 @Service("ForgotUserInfoVerifyCodeService")
 public class ForgotUserInfoVerifyCodeServiceImpl implements VerifyCodeService {

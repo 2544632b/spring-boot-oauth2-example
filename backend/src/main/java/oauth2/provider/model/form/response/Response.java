@@ -41,6 +41,10 @@ public class Response implements Serializable {
         return new ResponsePreview(HttpStatus.SC_INTERNAL_SERVER_ERROR, content);
     }
 
+    public static ResponsePreview responseBadRequest(String content) {
+        return new ResponsePreview(HttpStatus.SC_BAD_REQUEST, content);
+    }
+
     // ...
 
     public int getStatusCode() {

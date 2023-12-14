@@ -2,7 +2,7 @@ package oauth2.provider.controller.oauth;
 
 import oauth2.provider.model.form.response.oauth.OAuthClientInfoResp;
 import oauth2.provider.model.user.info.entity.OAuthEntity;
-import oauth2.provider.service.base.oauth.OAuthEntityService;
+import oauth2.provider.service.oauth.server.entity.OAuthEntityService;
 import jakarta.annotation.Resource;
 import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 public class OAuthClientInfo {
+
     @Resource
     private OAuthEntityService oauthEntity;
 
@@ -20,15 +21,19 @@ public class OAuthClientInfo {
         OAuthEntity oauthInfo = oauthEntity.findByClientId(StringEscapeUtils.escapeJava(cid));
 
         String[] scopes = oauthInfo.getScope().split(",");
-        List<String> finalInfo = new ArrayList<>();
+        List<String> info = new ArrayList<>();
         for(String str : scopes) {
             if(str.equals("profile")) {
-                finalInfo.add("Profile(except password)");
+                info.add("Profile (except password)");
             }
             if(str.equals("email")) {
-                finalInfo.add("Email");
+                info.add("Email");
+            }
+            if(str.equals("openid")) {
+                info.add("User authentication (Open ID Connect)");
             }
         }
-        return new OAuthClientInfoResp(oauthInfo.getClientName(), finalInfo);
+        return new OAuthClientInfoResp(oauthInfo.getClientName(), info);
     }
+
 }

@@ -4,12 +4,18 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+import java.security.Key;
 import java.util.Date;
 import java.util.function.Function;
 
 public abstract class AbstractJSONWebToken {
+
     protected long JSON_WEB_TOKEN_VALIDITY;
+
     protected String secret;
+
+    protected Key secretKey;
+
     protected SignatureAlgorithm algorithm;
 
     public String getKeywordsFromToken(String token) {
@@ -40,9 +46,16 @@ public abstract class AbstractJSONWebToken {
     }
 
     public String doGenerateToken(Claims claims, String subject) {
-        return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + JSON_WEB_TOKEN_VALIDITY * 1000))
-                .signWith(algorithm, secret).compact();
+        if(secret != null) {
+            return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
+                    .setExpiration(new Date(System.currentTimeMillis() + JSON_WEB_TOKEN_VALIDITY * 1000))
+                    .signWith(algorithm, secret).compact();
+        }
+        else {
+            return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
+                    .setExpiration(new Date(System.currentTimeMillis() + JSON_WEB_TOKEN_VALIDITY * 1000))
+                    .signWith(algorithm, secretKey).compact();
+        }
     }
 
     public Boolean validateToken(String token, String keywords) {

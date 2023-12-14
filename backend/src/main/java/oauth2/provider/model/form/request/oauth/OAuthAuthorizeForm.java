@@ -1,5 +1,6 @@
 package oauth2.provider.model.form.request.oauth;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 
 import java.io.Serializable;
@@ -7,9 +8,11 @@ import java.io.Serializable;
 public class OAuthAuthorizeForm implements Serializable {
 
     @NotBlank
+    @JsonProperty("response_type")
     private String responseType;
 
     @NotBlank
+    @JsonProperty("client_id")
     private String clientId;
 
     @NotBlank
@@ -19,6 +22,7 @@ public class OAuthAuthorizeForm implements Serializable {
     private String state;
 
     @NotBlank
+    @JsonProperty("redirect_uri")
     private String redirectURI;
 
     public String getResponseType() {

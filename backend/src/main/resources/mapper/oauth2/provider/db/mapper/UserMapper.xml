@@ -3,10 +3,9 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!-- :( -->
-<mapper namespace="oauth2.provider.user.mapper.UserMapper">
+<mapper namespace="oauth2.provider.db.mapper.UserMapper">
 
     <!--Structure-->
-    <!--Username and Email are unique and without id, username should open the utf8-bin.-->
     <resultMap id="userEntityMap" type="oauth2.provider.model.user.info.entity.UserEntity">
         <result property="username" column="user_login" />
         <result property="password" column="user_pass" />
@@ -15,6 +14,7 @@
         <result property="registerDate" column="user_reg_date" />
         <result property="userStatus" column="user_status" />
         <result property="userTotp" column="user_totp_token" />
+        <result property="githubId" column="github_id" />
     </resultMap>
     
     <!--Find by any keys-->
@@ -28,6 +28,7 @@
         user_reg_date,
         user_status,
         user_totp,
+        github_id
         <!--[CONTENT END]-->
         from users where
         user_login = #{keywords} or user_email = #{keywords}
@@ -44,6 +45,7 @@
         user_reg_date,
         user_status,
         user_totp,
+        github_id
         <!--[CONTENT END]-->
         from users where
         user_login = #{username}
@@ -60,9 +62,27 @@
         user_reg_date,
         user_status,
         user_totp,
+        github_id
         <!--[CONTENT END]-->
         from users where
         user_email = #{email}
+    </select>
+
+    <!--Find by a GitHub ID-->
+    <select id="findByGithubId" resultMap="userEntityMap">
+        select
+        <!--[CONTENT BEGIN]-->
+        user_login,
+        user_pass,
+        user_email,
+        user_reg_ip,
+        user_reg_date,
+        user_status,
+        user_totp,
+        github_id
+        <!--[CONTENT END]-->
+        from users where
+        github_id = #{id}
     </select>
 
     <!--Update password-->
@@ -75,9 +95,20 @@
         update users set user_last_login_ip = #{ip} where user_login = #{keywords} or user_email = #{keywords}
     </update>
 
-    <insert id="insertUser">
+    <insert id="save">
         <!-- :( -->
-        insert users values(
+        insert into
+        users(
+            user_login,
+            user_email,
+            user_reg_ip,
+            user_last_login_ip,
+            user_reg_date,
+            user_status,
+            user_totp,
+            user_pass
+        )
+        values(
             #{user.username},
             #{user.email},
             #{user.regAddress},
@@ -88,4 +119,5 @@
             #{user.password}
         )
     </insert>
+
 </mapper>

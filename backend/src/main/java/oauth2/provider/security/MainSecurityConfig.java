@@ -2,7 +2,9 @@ package oauth2.provider.security;
 
 import oauth2.provider.security.filter.BearerAuthenticationFilter;
 import oauth2.provider.security.filter.DefaultAuthenticationFilter;
-import oauth2.provider.service.base.user.ProviderUserDetailsService;
+import oauth2.provider.service.authentication.ProviderUserDetailsService;
+import oauth2.provider.util.functional.oidc.ServerConfiguration;
+import oauth2.provider.util.functional.oidc.jwk.JWKConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -10,7 +12,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,6 +23,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 
 @Configuration
@@ -57,6 +60,16 @@ public class MainSecurityConfig {
     }
     */
 
+    @Bean(name = "jwkConfiguration")
+    public JWKConfiguration jwkConfiguration() throws NoSuchAlgorithmException, InvalidKeySpecException {
+        return new JWKConfiguration()
+                .setupRSA()
+                .setAlg()
+                .setPublicKey()
+                .setPrivateKey()
+                .setSig();
+    }
+
     @Bean
     public AuthenticationManager authenticationManager() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
@@ -90,5 +103,24 @@ public class MainSecurityConfig {
         http.addFilterBefore(onceAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         http.cors(Customizer.withDefaults());
         return http.build();
+    }
+
+    @Bean
+    public ServerConfiguration serverConfiguration() {
+        return new ServerConfiguration()
+                .setIssuer("http://localhost:8000/")
+                .setJwk("http://localhost:8000/openid/jwks")
+                .setAuthorizationEndpoint("http://localhost/authorize/confirm")
+                .setTokenEndpoint("http://localhost:8000/oauth/token")
+                .setUserInfoEndpoint("http://localhost:8000/default/user/info")
+                .setScopesSupported(List.of("openid", "profile"))
+                .setClaimsSupported(List.of("sub", "username", "email"))
+                .setAuthorizationGrant()
+                .setCodeResponseType()
+                .setResponseFormPostMode()
+                .setTokenClientSecretPost()
+                .setIdTokenRS256AlgSupported()
+                .setSubjectPublic()
+                .setPlainCodeChallenge();
     }
 }

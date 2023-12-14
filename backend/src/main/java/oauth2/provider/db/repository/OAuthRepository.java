@@ -1,4 +1,4 @@
-package oauth2.provider.user.repository;
+package oauth2.provider.db.repository;
 
 import oauth2.provider.model.user.info.entity.OAuthEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

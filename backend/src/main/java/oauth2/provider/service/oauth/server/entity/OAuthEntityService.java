@@ -1,4 +1,4 @@
-package oauth2.provider.service.base.oauth;
+package oauth2.provider.service.oauth.server.entity;
 
 import oauth2.provider.model.user.info.entity.OAuthEntity;
 

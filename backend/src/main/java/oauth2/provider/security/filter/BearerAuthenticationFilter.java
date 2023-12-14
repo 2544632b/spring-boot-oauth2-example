@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import oauth2.provider.authentication.token.UsernamePasswordAuthenticationToken;
 import oauth2.provider.model.form.response.Response;
 import oauth2.provider.model.user.info.entity.UserEntity;
-import oauth2.provider.service.base.user.UserEntityService;
+import oauth2.provider.service.profile.user.entity.UserEntityService;
 import oauth2.provider.service.oauth.server.OAuthSessionInfoService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.FilterChain;
@@ -57,8 +57,6 @@ public class BearerAuthenticationFilter extends OncePerRequestFilter {
         response.setHeader("X-XSS-Protection", "1");
         response.setHeader("X-Content-Type-Options", "nosniff");
         response.setHeader("X-Powered-By", "");
-
-        response.setHeader("Set-Cookie", "HttpOnly;Secure;SameSite=None");
 
         // Scope
         var url2Scope = Map.of(

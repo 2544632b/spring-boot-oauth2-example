@@ -147,8 +147,8 @@
                     }
                 })
                     .then(function (response) {
-                        if (response.data.SessionID) {
-                            VueCookies.set('SESSIONID', response.data.SessionID, {
+                        if (response.data.session_id) {
+                            VueCookies.set('SESSIONID', response.data.session_id, {
                                 domain: 'localhost',
                                 path: '/login',
                                 httpOnly: true,

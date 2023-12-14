@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import oauth2.provider.authentication.token.UsernamePasswordAuthenticationToken;
 import oauth2.provider.model.form.response.Response;
 import oauth2.provider.model.user.info.entity.UserEntity;
-import oauth2.provider.service.base.user.UserEntityService;
+import oauth2.provider.service.profile.user.entity.UserEntityService;
 import oauth2.provider.util.aes.AESUtil;
 import oauth2.provider.util.jwt.JSONWebToken;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -60,8 +60,6 @@ public class DefaultAuthenticationFilter extends OncePerRequestFilter {
         response.setHeader("X-Content-Type-Options", "nosniff");
         response.setHeader("X-Powered-By", "");
 
-        response.setHeader("Set-Cookie", "HttpOnly;Secure;SameSite=None");
-
         final String encryptedToken = request.getHeader("X-Access-Token");
         String userToken, decryptedToken;
         OutputStream os = response.getOutputStream();
@@ -72,6 +70,9 @@ public class DefaultAuthenticationFilter extends OncePerRequestFilter {
                 "/register/verify",
                 "/user/forgot/password/email",
                 "/user/forgot/password/email/verify",
+
+                "/.well-known/openid-configuration",
+                "/openid/jwks",
 
                 "/oauth/token", // Server side access, see https://www.rfc-editor.org/rfc/rfc6749.html
                 "/oauth/client/continue/github", // -> "/login" (Publicly request)

@@ -20,13 +20,14 @@ public class ClientRefererFilter extends OncePerRequestFilter {
         for(String s : urls) {
             if(request.getRequestURI().equals(s)) {
                 String referer = request.getHeader("Referer");
-                if(referer.equals("http://localhost")) {
+                if(referer.equals("http://localhost/")) {
                     break;
                 }
 
                 OutputStream os = response.getOutputStream();
                 os.write(new ObjectMapper().writeValueAsString(Response.responseForbidden("Wrong referer, are you using the website?")).getBytes());
                 os.flush();
+                return;
             }
         }
 

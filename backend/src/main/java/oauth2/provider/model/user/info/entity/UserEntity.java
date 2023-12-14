@@ -6,12 +6,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import java.math.BigInteger;
 import java.util.Collection;
 
-
-// Username and Email are unique and without id, username should in `utf8-bin`.
 @Entity // Hibernate
 @Data   // Lombok
 @Table(name = "Users")  // Hibernate
@@ -35,10 +32,10 @@ public class UserEntity implements UserDetails {
     private String lastLoginIp;
 
     @Column(name = "UserRegDate")
-    private long registerDate;
+    private Long registerDate;
 
     @Column(name = "UserStatus")
-    private int userStatus;
+    private Integer userStatus;
 
     @Column(name = "UserTotpToken")
     private String userTotp;
@@ -51,7 +48,7 @@ public class UserEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return AuthorityUtils.createAuthorityList("ROLE_USER");
+        return AuthorityUtils.createAuthorityList("USER");
     }
 
     public UserEntity(String email, String username, String password, String regAddress, String userTotp) {
@@ -74,7 +71,6 @@ public class UserEntity implements UserDetails {
         this.lastLoginDate = lastLoginDate;
     }
 
-    // 空构造保证可以返回
     public UserEntity() {}  // Real result from database
 
     @Override
@@ -95,7 +91,7 @@ public class UserEntity implements UserDetails {
         return regAddress;
     }
 
-    public long getRegisterDate() {
+    public Long getRegisterDate() {
         return registerDate;
     }
 
@@ -134,4 +130,5 @@ public class UserEntity implements UserDetails {
     public boolean isEnabled() {
         return userStatus == 1;
     }
+
 }
